@@ -29,11 +29,13 @@ public class Bet {
     @Column(nullable = false)
     private BigDecimal amount;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String prediction; // YES, NO
+    private BetPrediction prediction; // YES, NO
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status; // PLACED, WON, LOST
+    private BetStatus status; // PLACED, WON, LOST
 
     @Column(name = "odds_at_placement", nullable = false)
     private BigDecimal oddsAtPlacement;
@@ -43,6 +45,4 @@ public class Bet {
 
     @Column(name = "created_at", updatable = false)
     private Instant createdAt = Instant.now();
-
-    // Геттеры, сеттеры, конструкторы
 }

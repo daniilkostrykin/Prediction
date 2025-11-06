@@ -23,11 +23,12 @@ public class Transaction {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bet_id") // nullable
+    @JoinColumn(name = "bet_id")
     private Bet bet;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String type; // BET_PLACEMENT, WINNINGS_PAYOUT, DEPOSIT
+    private TransactionType type; // BET_PLACEMENT, WINNINGS_PAYOUT, DEPOSIT
 
     @Column(nullable = false)
     private BigDecimal amount;

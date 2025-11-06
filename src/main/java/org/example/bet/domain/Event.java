@@ -23,17 +23,25 @@ public class Event {
 
     private String description;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status; // PENDING, ACTIVE, CLOSED, FINISHED
+    private EventStatus status; // PENDING, ACTIVE, CLOSED, FINISHED
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String outcome; // UNDEFINED, YES, NO
+    private EventOutcome outcome; // UNDEFINED, YES, NO
 
     @Column(name = "odds_yes", nullable = false)
     private BigDecimal oddsYes;
 
     @Column(name = "odds_no", nullable = false)
     private BigDecimal oddsNo;
+
+    @Column(name = "total_amount_yes", nullable = false)
+    private BigDecimal totalAmountYes = BigDecimal.ZERO;
+
+    @Column(name = "total_amount_no", nullable = false)
+    private BigDecimal totalAmountNo = BigDecimal.ZERO;
 
     @Column(name = "closes_at", nullable = false)
     private Instant closesAt;

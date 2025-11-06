@@ -1,12 +1,14 @@
-// package: org.example.bet
-// файл: BetApplication.java
 
 package org.example.bet;
 
-// Импорты для CommandLineRunner и твоих классов
 import org.example.bet.domain.Bet;
 import org.example.bet.domain.Event;
 import org.example.bet.domain.User;
+import org.example.bet.domain.BetPrediction;
+import org.example.bet.domain.BetStatus;
+import org.example.bet.domain.EventStatus;
+import org.example.bet.domain.EventOutcome;
+import org.example.bet.domain.UserRole;
 import org.example.bet.repository.BetRepository;
 import org.example.bet.repository.EventRepository;
 import org.example.bet.repository.UserRepository;
@@ -26,57 +28,53 @@ public class BetApplication {
         SpringApplication.run(BetApplication.class, args);
     }
 
-    // --- ВОТ ЭТОТ КОД НУЖНО ДОБАВИТЬ ---
     @Bean
     public CommandLineRunner dataLoader(
             UserRepository userRepository,
             EventRepository eventRepository,
-            BetRepository betRepository
-    ) {
+            BetRepository betRepository) {
         return args -> {
-            System.out.println("--- ЗАПУСК СОЗДАНИЯ ТЕСТОВЫХ ДАННЫХ ---");
+            System.out.println("Создание тестовых данных");
 
-            // 1. Создаем и сохраняем пользователя
             User testUser = new User();
             testUser.setUsername("testuser");
             testUser.setEmail("test@example.com");
-            testUser.setPassword("hashed_password_123"); // В реальности здесь будет хэш
-            testUser.setRole("USER");
+            testUser.setPassword("hashed_password_123");
+            testUser.setRole(UserRole.USER);
             testUser.setBalance(new BigDecimal("1000.00"));
 
-            // Супер-важный момент: метод save() возвращает сохраненную сущность с присвоенным ID!
             User savedUser = userRepository.save(testUser);
             System.out.println("Сохранен пользователь: " + savedUser.getUsername() + " с ID: " + savedUser.getId());
 
-            // 2. Создаем и сохраняем событие
             Event testEvent = new Event();
             testEvent.setTitle("Произойдет ли событие X в 2025 году?");
             testEvent.setDescription("Полное описание события X...");
-            testEvent.setStatus("ACTIVE");
-            testEvent.setOutcome("UNDEFINED");
-            testEvent.setClosesAt(Instant.now().plus(10, ChronoUnit.DAYS)); // Ставки закрываются через 10 дней
+            testEvent.setStatus(EventStatus.ACTIVE);
+            testEvent.setOutcome(EventOutcome.UNDEFINED);
+            testEvent.setClosesAt(Instant.now().plus(10, ChronoUnit.DAYS));
             testEvent.setOddsYes(new BigDecimal("1.90"));
             testEvent.setOddsNo(new BigDecimal("1.90"));
+            testEvent.setTotalAmountYes(BigDecimal.ZERO);
+            testEvent.setTotalAmountNo(BigDecimal.ZERO);
 
             Event savedEvent = eventRepository.save(testEvent);
             System.out.println("Сохранено событие: '" + savedEvent.getTitle() + "' с ID: " + savedEvent.getId());
 
-            // 3. Создаем и сохраняем ставку, связывая пользователя и событие
             Bet testBet = new Bet();
             testBet.setAmount(new BigDecimal("50.00"));
-            testBet.setPrediction("YES");
-            testBet.setStatus("PLACED");
+            testBet.setPrediction(BetPrediction.YES);
+            testBet.setStatus(BetStatus.PLACED);
             testBet.setOddsAtPlacement(savedEvent.getOddsYes());
             testBet.setPotentialPayout(testBet.getAmount().multiply(testBet.getOddsAtPlacement()));
 
-            // Устанавливаем связи!
             testBet.setUser(savedUser);
             testBet.setEvent(savedEvent);
 
             betRepository.save(testBet);
-            System.out.println("Сохранена ставка от пользователя " + savedUser.getUsername() + " на событие '" + savedEvent.getTitle() + "'");
+            System.out.println("Сохранена ставка от пользователя " + savedUser.getUsername() + " на событие '"
+                    + savedEvent.getTitle() + "'");
 
-            System.out.println("--- ТЕСТОВЫЕ ДАННЫЕ УСПЕШНО СОЗДАНЫ ---");
+            System.out.println("Текстовые данные сохранены");
         };
     }
 }

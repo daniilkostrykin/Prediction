@@ -1,4 +1,3 @@
-// package: org.example.bet.repository
 package org.example.bet.repository;
 
 import org.example.bet.domain.Event;

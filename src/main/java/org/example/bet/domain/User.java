@@ -25,16 +25,16 @@ public class User {
     private String email;
 
     @Column(name = "password_hash", nullable = false)
-    private String password; // В Spring Security здесь будет хэш
+    private String password;
 
     @Column(nullable = false)
     private BigDecimal balance;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String role; // "USER", "ADMIN"
+    private UserRole role;
 
     @Column(name = "created_at", updatable = false)
     private Instant createdAt = Instant.now();
 
-    // Геттеры, сеттеры, конструкторы
 }
