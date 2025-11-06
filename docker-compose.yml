@@ -1,0 +1,22 @@
+services:
+
+  db:
+    image: postgres:18
+    container_name: bet_db
+    restart: always
+
+    environment:
+      POSTGRES_USER: betuser
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: betdb
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      # For Postgres 18+ mount the parent directory so the image can
+      # create major-version-specific subdirectories (avoids pg_upgrade/mount warnings)
+      - bet-db-data:/var/lib/postgresql
+
+volumes:
+  bet-db-data:
