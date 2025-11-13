@@ -1,1 +1,1 @@
-CREATE SCHEMA IF NOT EXISTS betting_schema;
+CREATE SCHEMA IF NOT EXISTS prediction_schema;

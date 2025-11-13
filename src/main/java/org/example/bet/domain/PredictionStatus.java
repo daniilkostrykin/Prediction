@@ -1,6 +1,6 @@
 package org.example.bet.domain;
 
-public enum BetStatus {
+public enum PredictionStatus {
     PLACED,
     WON,
     LOST

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
@@ -31,18 +30,6 @@ public class Event {
     @Column(nullable = false)
     private EventOutcome outcome; // UNDEFINED, YES, NO
 
-    @Column(name = "odds_yes", nullable = false)
-    private BigDecimal oddsYes;
-
-    @Column(name = "odds_no", nullable = false)
-    private BigDecimal oddsNo;
-
-    @Column(name = "total_amount_yes", nullable = false)
-    private BigDecimal totalAmountYes = BigDecimal.ZERO;
-
-    @Column(name = "total_amount_no", nullable = false)
-    private BigDecimal totalAmountNo = BigDecimal.ZERO;
-
     @Column(name = "closes_at", nullable = false)
     private Instant closesAt;
 
@@ -51,4 +38,5 @@ public class Event {
 
     @Column(name = "updated_at")
     private Instant updatedAt = Instant.now();
+
 }

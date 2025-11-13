@@ -1,6 +1,6 @@
 package org.example.bet.domain;
 
-public enum BetPrediction {
+public enum PredictionChoice {
     YES,
     NO
 }

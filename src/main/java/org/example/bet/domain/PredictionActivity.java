@@ -5,15 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
-@Table(name = "bets")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Bet {
+@Table(name = "prediction_activities")
+public class PredictionActivity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,25 +22,12 @@ public class Bet {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id", nullable = false)
-    private Event event;
-
-    @Column(nullable = false)
-    private BigDecimal amount;
+    @JoinColumn(name = "prediction_id")
+    private Prediction prediction;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private BetPrediction prediction; // YES, NO
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private BetStatus status; // PLACED, WON, LOST
-
-    @Column(name = "odds_at_placement", nullable = false)
-    private BigDecimal oddsAtPlacement;
-
-    @Column(name = "potential_payout", nullable = false)
-    private BigDecimal potentialPayout;
+    private PredictionActivityType type; // PREDICTION_PLACED, PREDICTION_RESOLVED
 
     @Column(name = "created_at", updatable = false)
     private Instant createdAt = Instant.now();

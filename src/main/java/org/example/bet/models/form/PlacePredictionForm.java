@@ -1,9 +1,7 @@
 package org.example.bet.models.form;
 
-import java.math.BigDecimal;
 
-public record PlaceBetForm(
+public record PlacePredictionForm(
         Long eventId,
-        BigDecimal amount,
         String prediction
 ) {}

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
@@ -27,8 +26,8 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private BigDecimal balance;
+    @Column(name = "successful_predictions", nullable = false)
+    private int successfulPredictions = 0;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
