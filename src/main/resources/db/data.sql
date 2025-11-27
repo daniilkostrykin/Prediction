@@ -1,70 +1,78 @@
--- Create tables for the application
-CREATE TABLE IF NOT EXISTS prediction_schema.users (
+-- 1. Удаляем старое
+DROP TABLE IF EXISTS prediction_schema.prediction_activities CASCADE;
+DROP TABLE IF EXISTS prediction_schema.predictions CASCADE;
+DROP TABLE IF EXISTS prediction_schema.event_options CASCADE;
+DROP TABLE IF EXISTS prediction_schema.events CASCADE;
+DROP TABLE IF EXISTS prediction_schema.users CASCADE;
+
+-- 2. Создаем таблицы (СТРОГО КАК В JAVA ENTITY)
+
+CREATE TABLE prediction_schema.users (
     id SERIAL PRIMARY KEY,
-    username VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(25) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    role VARCHAR(50) DEFAULT 'USER',
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL, -- В Java поле называется password, но мапится на password_hash (проверь @Column в User.java, если там нет name=..., то просто password)
+    email VARCHAR(255) NOT NULL UNIQUE,
+    role VARCHAR(50) NOT NULL,
+    successful_predictions INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS prediction_schema.events (
+CREATE TABLE prediction_schema.events (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,        -- Было name, стало title
     description TEXT,
-    start_date TIMESTAMP,
-    end_date TIMESTAMP,
-    status VARCHAR(50) DEFAULT 'ACTIVE',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    status VARCHAR(50) NOT NULL,
+    closes_at TIMESTAMP NOT NULL,       -- Было start_date/end_date, стало closes_at
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS prediction_schema.event_options (
+CREATE TABLE prediction_schema.event_options (
     id SERIAL PRIMARY KEY,
     event_id INTEGER REFERENCES prediction_schema.events(id),
-    option_name VARCHAR(255) NOT NULL,
-    odd DECIMAL(10, 2) DEFAULT 1.00
+    text VARCHAR(255) NOT NULL,         -- Было option_name, стало text
+    is_correct_outcome BOOLEAN DEFAULT FALSE -- Было odd, стало поле правильного ответа
 );
 
-CREATE TABLE IF NOT EXISTS prediction_schema.predictions (
+CREATE TABLE prediction_schema.predictions (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES prediction_schema.users(id),
     event_id INTEGER REFERENCES prediction_schema.events(id),
-    event_option_id INTEGER REFERENCES prediction_schema.event_options(id),
-    amount DECIMAL(10, 2) NOT NULL,
-    status VARCHAR(50) DEFAULT 'PENDING',
+    chosen_option_id INTEGER REFERENCES prediction_schema.event_options(id),
+    status VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS prediction_schema.prediction_activities (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES prediction_schema.users(id),
-    prediction_id INTEGER REFERENCES prediction_schema.predictions(id),
-    activity_type VARCHAR(50) NOT NULL,
-    description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+-- 3. Вставка данных
 
--- Insert sample data
-INSERT INTO prediction_schema.users (username, password, email, role) VALUES
-('admin', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin@example.com', 'ADMIN'),
-('user1', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'user1@example.com', 'USER'),
-('user2', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'user2@example.com', 'USER');
+-- Юзеры (пароль 'password')
+INSERT INTO prediction_schema.users (username, password_hash, email, role, successful_predictions) VALUES
+('admin', '12345', 'admin@example.com', 'ADMIN', 0),
+('user1', '12345', 'user1@example.com', 'USER', 0);
 
-INSERT INTO prediction_schema.events (name, description, start_date, end_date, status) VALUES
-('Football Match', 'Sample football match between Team A and Team B', '2025-12-01 15:00', '2025-12-01 17:00:00', 'ACTIVE'),
-('Basketball Game', 'Sample basketball game between Lakers and Celtics', '2025-12-02 19:00:00', '2025-12-02 21:00:00', 'ACTIVE'),
-('Tennis Tournament', 'Sample tennis match between two players', '2025-12-03 14:00:00', '2025-12-03 16:00:00', 'SCHEDULED');
+-- События
+INSERT INTO prediction_schema.events (title, description, status, closes_at) VALUES
+('Финал ЛЧ: Реал - Боруссия', 'Кто победит в главном матче года?', 'ACTIVE', '2025-06-01 22:00:00'),
+('Выборы в США', 'Кто станет следующим президентом?', 'ACTIVE', '2025-11-05 00:00:00'),
+('The International 2025', 'Победитель турнира', 'CLOSED', '2025-08-20 18:00:00');
 
-INSERT INTO prediction_schema.event_options (event_id, option_name, odd) VALUES
-(1, 'Team A wins', 1.80),
-(1, 'Team B wins', 2.10),
-(1, 'Draw', 3.20),
-(2, 'Lakers win', 1.65),
-(2, 'Celtics win', 2.25),
-(3, 'Player 1 wins', 1.75),
-(3, 'Player 2 wins', 2.05);
+-- Опции (Варианты)
+-- Для события 1 (Футбол)
+INSERT INTO prediction_schema.event_options (event_id, text) VALUES
+(1, 'Реал Мадрид'),
+(1, 'Боруссия Дортмунд');
 
-INSERT INTO prediction_schema.predictions (user_id, event_id, event_option_id, amount, status) VALUES
-(2, 1, 1, 50.00, 'PENDING'),
-(3, 1, 2, 30.00, 'PENDING'),
-(2, 2, 4, 75.00, 'PENDING');
+-- Для события 2 (Выборы)
+INSERT INTO prediction_schema.event_options (event_id, text) VALUES
+(2, 'Кандидат А'),
+(2, 'Кандидат Б'),
+(2, 'Кандидат В');
+
+-- Для события 3 (Дота)
+INSERT INTO prediction_schema.event_options (event_id, text) VALUES
+(3, 'Team Spirit'),
+(3, 'Gaimin Gladiators');
+
+-- Ставки (Predictions)
+INSERT INTO prediction_schema.predictions (user_id, event_id, chosen_option_id, status) VALUES
+(2, 1, 1, 'PLACED'); -- user1 поставил на Реал

@@ -38,7 +38,7 @@ public class EventController {
         model.addAttribute("totalPages", eventPage.getTotalPages());
         model.addAttribute("search", search);
 
-        return "events/list";
+        return "events/all";
     }
 
     @GetMapping("/details/{id}")
@@ -48,10 +48,13 @@ public class EventController {
         return "events/details";
     }
 
+    @ModelAttribute("createEventForm")
+    public CreateEventForm initCreateForm(){
+        return new CreateEventForm("", "", List.of("", ""));
+    }
+
     @GetMapping("/add")
-    public String showCreateForm(Model model) {
-        // Инициализируем пустую форму, список опций пуст
-        model.addAttribute("createEventForm", new CreateEventForm("", "", List.of()));
+    public String showCreateForm() {
         return "events/add";
     }
 
@@ -59,11 +62,33 @@ public class EventController {
     public String createEvent(@Valid @ModelAttribute("createEventForm") CreateEventForm form,
                               BindingResult bindingResult,
                               RedirectAttributes redirectAttributes) {
+
+        log.debug("Обработка POST-запроса на добавление события");                        
+        
         if (bindingResult.hasErrors()) {
-            return "events/add";
+            log.warn("Ошибки валидации: {}", bindingResult.getAllErrors());
+
+            redirectAttributes.addFlashAttribute("createEventForm", form);
+
+            redirectAttributes.addFlashAttribute(
+                    "org.springframework.validation.BindingResult.createEventForm", 
+                    bindingResult
+            );
+
+            return "redirect:/events/add";
         }
+
         eventService.createEvent(form);
         redirectAttributes.addFlashAttribute("successMessage", "Событие успешно создано!");
         return "redirect:/events/all";
+    }
+
+    @GetMapping("delete/{id}")
+    public String deleteEvent(@PathVariable("id") Long id, RedirectAttributes redirectAttributes){
+        log.debug("Удаление события: {}", id);
+        eventService.deleteEvent(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Событие успешно удалено");
+        return "redirect:/events/all";
+
     }
 }

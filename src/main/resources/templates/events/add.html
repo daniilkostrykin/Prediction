@@ -7,7 +7,7 @@
     <h2>Создать новое событие</h2>
     <form th:action="@{/events/add}" th:object="${createEventForm}" method="post">
         <label>Название
-            <input type="text" th:field="*{title}" required>
+            <input type="text" th:field="*{title}" >
             <small class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></small>
         </label>
 
@@ -16,10 +16,11 @@
         </label>
 
         <label>Вариант 1
-            <input type="text" name="options" required>
+            <input type="text" th:field="*{options[0]}" >
+            <small class="text-danger" th:if="${#fields.hasErrors('options')}" th:errors="*{options}"></small>
         </label>
         <label>Вариант 2
-            <input type="text" name="options" required>
+            <input type="text" th:field="*{options[1]}" >
         </label>
 
         <button type="submit">Создать</button>

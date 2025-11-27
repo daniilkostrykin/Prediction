@@ -8,6 +8,7 @@ import org.example.bet.domain.EventStatus;
 import org.example.bet.models.EventDetailsViewModel;
 import org.example.bet.models.EventListItemViewModel;
 import org.example.bet.models.EventOptionViewModel;
+import org.example.bet.models.exceptions.EventNotFoundException;
 import org.example.bet.models.form.CreateEventForm;
 import org.example.bet.repository.EventRepository;
 import org.springframework.data.domain.Page;
@@ -50,10 +51,8 @@ public class EventService {
     }
 
     public EventDetailsViewModel findEventById(Long id) {
-        Event event = eventRepository.findById(id).orElse(null);
-        if (event == null) {
-            return null;
-        }
+        Event event = eventRepository.findById(id)
+            .orElseThrow(() -> new EventNotFoundException("Событие с ID " + id + " не найдено"));
         return new EventDetailsViewModel(
                 event.getId(),
                 event.getTitle(),
@@ -87,5 +86,18 @@ public class EventService {
                         .map(option -> new EventOptionViewModel(option.getId(), option.getText(), 0))
                         .collect(Collectors.toList())
         );
+    }
+
+    public void deleteEvent(Long id){
+        if (!eventRepository.existsById(id)) {
+            throw new EventNotFoundException("Событие с ID " + id + " не найдено для удаления");
+        }
+        eventRepository.deleteById(id);
+    }
+
+    public Event findEventWithStats(Long id){
+        Event event = eventRepository.findById(id)
+        .orElseThrow(() -> new EventNotFoundException("Событие с ID " + id + " не существует"));
+        return event;
     }
 }

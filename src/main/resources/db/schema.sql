@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS prediction_schema.event_options (
     id SERIAL PRIMARY KEY,
     event_id INTEGER REFERENCES prediction_schema.events(id),
     option_name VARCHAR(255) NOT NULL,
-    odd DECIMAL(10, 2) DEFAULT 1.00
+    odd DECIMAL(10, 2) DEFAULT 1.00,
+    UNIQUE(event_id, option_name)
 );
 
 -- Create predictions table
@@ -38,7 +39,8 @@ CREATE TABLE IF NOT EXISTS prediction_schema.predictions (
     event_option_id INTEGER REFERENCES prediction_schema.event_options(id),
     amount DECIMAL(10, 2) NOT NULL,
     status VARCHAR(50) DEFAULT 'PENDING',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, event_id, event_option_id)
 );
 
 -- Create prediction_activities table

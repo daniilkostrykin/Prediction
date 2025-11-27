@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<!-- Исправленный синтаксис фрагментов -->
+<head th:replace="~{fragments/head}"></head>
+<body>
+<div th:replace="~{fragments/navbar}"></div>
+
+<main class="container">
+    <h2>Список событий</h2>
+
+    <!-- 1. Форма ПОИСКА (Задание 5.1) -->
+    <form method="get" th:action="@{/events/all}" style="margin-bottom: 20px;">
+        <div role="group" style="display: flex; gap: 10px;">
+            <input type="search" 
+                   name="search" 
+                   placeholder="Поиск по названию..." 
+                   th:value="${search}">
+            <button type="submit">Найти</button>
+        </div>
+    </form>
+
+    <!-- 2. Сетка событий (Задание 2.1) -->
+    <div class="grid">
+        <!-- Если список пуст, покажем сообщение -->
+        <div th:if="${events.empty}">
+            <p>Событий пока нет. Загляните позже!</p>
+        </div>
+
+        <!-- Цикл вывода карточек -->
+        <div th:each="event : ${events}" class="card" style="border: 1px solid #ccc; padding: 20px; margin-bottom: 20px; border-radius: 8px;">
+            <header>
+                <h3 th:text="${event.title}" style="margin-bottom: 5px;">Название события</h3>
+                <small th:text="${event.status}" style="color: grey;">STATUS</small>
+            </header>
+            
+            <p>Закрытие: <span th:text="${#dates.format(event.closesAt, 'dd-MM-yyyy HH:mm')}"></span></p>
+            
+            <!-- Ссылка на детали (Задание 3.1) -->
+            <footer style="margin-top: 10px;">
+                <a th:href="@{/events/details/{id}(id=${event.id})}" role="button">Подробнее</a>
+            </footer>
+        </div>
+    </div>
+
+    <!-- 3. Пагинация (Задание 5.1) -->
+    <nav th:if="${totalPages > 1}" style="margin-top: 20px;">
+        <ul style="display: flex; list-style: none; gap: 10px; padding: 0;">
+            <li th:if="${currentPage > 0}">
+                <a th:href="@{/events/all(page=${currentPage - 1}, search=${search})}" role="button" class="secondary">« Назад</a>
+            </li>
+
+            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                <a th:href="@{/events/all(page=${i}, search=${search})}"
+                   th:text="${i + 1}"
+                   th:classappend="${i == currentPage} ? 'contrast' : 'secondary'"
+                   role="button">1</a>
+            </li>
+
+            <li th:if="${currentPage < totalPages - 1}">
+                <a th:href="@{/events/all(page=${currentPage + 1}, search=${search})}" role="button" class="secondary">Вперед »</a>
+            </li>
+        </ul>
+    </nav>
+
+</main>
+<footer th:replace="~{fragments/footer}"></footer>
+</body>
+</html>
