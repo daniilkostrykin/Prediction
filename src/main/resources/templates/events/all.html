@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <!-- Исправленный синтаксис фрагментов -->
-<head th:replace="~{fragments/head}"></head>
+<head th:replace="~{fragments/head :: head}"></head>
 <body>
-<div th:replace="~{fragments/navbar}"></div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <main class="container">
     <h2>Список событий</h2>
@@ -63,6 +63,6 @@
     </nav>
 
 </main>
-<footer th:replace="~{fragments/footer}"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>

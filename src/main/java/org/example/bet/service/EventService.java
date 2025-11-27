@@ -26,13 +26,13 @@ public class EventService {
     @Transactional
     public void createEvent(CreateEventForm form) {
         Event event = new Event();
-        event.setTitle(form.title());
-        event.setDescription(form.description());
+        event.setTitle(form.getTitle());
+        event.setDescription(form.getDescription());
         event.setStatus(EventStatus.PENDING); // исправлено на PENDING
         event.setClosesAt(Instant.now().plusSeconds(86400)); // +1 день для примера
 
         // Создаем опции из списка строк
-        List<EventOption> options = form.options().stream().map(text -> {
+        List<EventOption> options = form.getOptions().stream().map(text -> {
             EventOption option = new EventOption();
             option.setText(text);
             option.setEvent(event);

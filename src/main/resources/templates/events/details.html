@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head"></head>
+<head th:replace="~{fragments/head :: head}"></head>
 <body>
-<div th:replace="fragments/navbar"></div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 <main class="container">
     <article>
         <h1 th:text="${event.title}"></h1>
@@ -22,6 +22,6 @@
         <a href="/events/all" role="button" class="secondary">Назад к списку</a>
     </article>
 </main>
-<footer th:replace="fragments/footer"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>

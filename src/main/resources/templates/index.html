@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head">
+<head th:replace="~{fragments/head :: head}">
     <title></title></head>
 <body>
-<div th:replace="fragments/navbar"></div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 <main class="container">
     <article class="text-center">
         <hgroup>
@@ -12,6 +12,6 @@
         </hgroup>
     </article>
 </main>
-<footer th:replace="fragments/footer"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>

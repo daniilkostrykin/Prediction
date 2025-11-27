@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head"></head>
+<head th:replace="~{fragments/head :: head}"></head>
 <body>
-<div th:replace="fragments/navbar"></div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 <main class="container">
     <h2>Создать новое событие</h2>
     <form th:action="@{/events/add}" th:object="${createEventForm}" method="post">

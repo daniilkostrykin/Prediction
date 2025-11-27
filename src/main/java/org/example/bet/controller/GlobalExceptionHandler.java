@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import org.example.bet.models.exceptions.EventNotFoundException;
 
 
@@ -22,7 +23,10 @@ public class GlobalExceptionHandler {
         model.addAttribute("errorCode", "404");
         return "error/custom-error";
     }
-
+    @ExceptionHandler(NoResourceFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public void handleResourceNotFound(NoResourceFoundException ex) {
+    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

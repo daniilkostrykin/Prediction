@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head"></head>
+<head th:replace="~{fragments/head :: head}"></head>
 <body>
     <main class="container">
         <h2>Регистрация</h2>
@@ -23,6 +23,6 @@
 
         </form>
     </main>
-<footer th:replace="fragments/footer"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>
