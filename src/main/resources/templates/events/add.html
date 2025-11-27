@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head"></head>
+<body>
+<div th:replace="fragments/navbar"></div>
+<main class="container">
+    <h2>Создать новое событие</h2>
+    <form th:action="@{/events/add}" th:object="${createEventForm}" method="post">
+        <label>Название
+            <input type="text" th:field="*{title}" required>
+            <small class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></small>
+        </label>
+
+        <label>Описание
+            <textarea th:field="*{description}"></textarea>
+        </label>
+
+        <label>Вариант 1
+            <input type="text" name="options" required>
+        </label>
+        <label>Вариант 2
+            <input type="text" name="options" required>
+        </label>
+
+        <button type="submit">Создать</button>
+    </form>
+</main>
+</body>
+</html>

@@ -5,5 +5,5 @@ import java.math.BigDecimal;
 public record AdminDashboardViewModel(
         long totalUsers,
         long activeEvents,
-        BigDecimal totalBetsAmountToday
+        long predictionsMadeToday
 ) {}

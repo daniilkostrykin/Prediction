@@ -2,6 +2,7 @@ package org.example.bet.models;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 
 public record EventDetailsViewModel(
@@ -9,8 +10,6 @@ public record EventDetailsViewModel(
     String title,
     String description,
     String status,
-    String outcome,
     Instant closesAt,
-    BigDecimal oddsYes,
-    BigDecimal oddsNo
+    List<EventOptionViewModel> optionsWithStats
 ) {}

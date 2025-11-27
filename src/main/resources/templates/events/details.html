@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head"></head>
+<body>
+<div th:replace="fragments/navbar"></div>
+<main class="container">
+    <article>
+        <h1 th:text="${event.title}"></h1>
+        <p th:text="${event.description}"></p>
+        <p><strong>Статус:</strong> <span th:text="${event.status}"></span></p>
+
+        <h3>Варианты исхода:</h3>
+        <ul>
+            <li th:each="opt : ${event.optionsWithStats}" th:text="${opt.text}"></li>
+        </ul>
+
+        <a href="/events/all" role="button" class="secondary">Назад к списку</a>
+    </article>
+</main>
+<footer th:replace="fragments/footer"></footer>
+</body>
+</html>

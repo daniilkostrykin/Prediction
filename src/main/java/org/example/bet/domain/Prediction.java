@@ -25,9 +25,9 @@ public class Prediction {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private PredictionChoice prediction; // YES, NO
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chosen_option_id", nullable = false)
+    private EventOption chosenOption;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

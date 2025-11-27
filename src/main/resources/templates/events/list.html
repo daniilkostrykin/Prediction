@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head"></head>
+<body>
+<div th:replace="fragments/navbar"></div>
+<main class="container">
+    <h2>Список событий</h2>
+    <div class="grid">
+        <div th:each="event : ${events}" class="card" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+            <h3 th:text="${event.title}">Название</h3>
+            <p>Статус: <span th:text="${event.status}"></span></p>
+            <p>Закрытие: <span th:text="${#dates.format(event.closesAt, 'dd-MM-yyyy HH:mm')}"></span></p>
+            <a th:href="@{/events/details/{id}(id=${event.id})}" role="button">Подробнее</a>
+        </div>
+    </div>
+</main>
+<footer th:replace="fragments/footer"></footer>
+</body>
+</html>

@@ -2,13 +2,13 @@ services:
 
   db:
     image: postgres:18
-    container_name: bet_db
+    container_name: prediction_db
     restart: always
 
     environment:
-      POSTGRES_USER: betuser
+      POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
-      POSTGRES_DB: betdb
+      POSTGRES_DB: prediction_db
 
     ports:
       - "5433:5432"
@@ -16,7 +16,9 @@ services:
     volumes:
       # For Postgres 18+ mount the parent directory so the image can
       # create major-version-specific subdirectories (avoids pg_upgrade/mount warnings)
-      - bet-db-data:/var/lib/postgresql
+      - prediction-db-data:/var/lib/postgresql
+      - ./src/main/resources/db/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - ./src/main/resources/db/data.sql:/docker-entrypoint-initdb.d/2-data.sql
 
 volumes:
-  bet-db-data:
+  prediction-db-data:

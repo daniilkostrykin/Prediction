@@ -1,9 +1,9 @@
 package org.example.bet.models.form;
 
-import java.time.Instant;
+import java.util.List;
 
 public record CreateEventForm(
         String title,
         String description,
-        Instant closesAt
+        List<String> options
 ) {}

@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "events")
@@ -26,9 +26,8 @@ public class Event {
     @Column(nullable = false)
     private EventStatus status; // PENDING, ACTIVE, CLOSED, FINISHED
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private EventOutcome outcome; // UNDEFINED, YES, NO
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EventOption> options;
 
     @Column(name = "closes_at", nullable = false)
     private Instant closesAt;
