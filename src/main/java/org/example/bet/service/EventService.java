@@ -5,12 +5,17 @@ import lombok.RequiredArgsConstructor;
 import org.example.bet.domain.Event;
 import org.example.bet.domain.EventOption;
 import org.example.bet.domain.EventStatus;
+import org.example.bet.domain.Prediction;
+import org.example.bet.domain.User;
 import org.example.bet.models.EventDetailsViewModel;
 import org.example.bet.models.EventListItemViewModel;
 import org.example.bet.models.EventOptionViewModel;
 import org.example.bet.models.exceptions.EventNotFoundException;
 import org.example.bet.models.form.CreateEventForm;
+import org.example.bet.repository.EventOptionRepository;
 import org.example.bet.repository.EventRepository;
+import org.example.bet.repository.PredictionRepository;
+import org.example.bet.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,17 +26,54 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class EventService {
+    private final PredictionRepository predictionRepository;
+    private final EventOptionRepository eventOptionRepository;
     private final EventRepository eventRepository;
+    private final UserRepository userRepository;
+
+    @Transactional 
+    public void finishEvent(Long eventId, Long winningOptionId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new EventNotFoundException("Событие не найдено"));
+
+        EventOption winningOption = eventOptionRepository.findById(winningOptionId)
+                .orElseThrow(() -> new IllegalArgumentException("Опция не найдена"));
+
+        if (!winningOption.getEvent().getId().equals(event.getId())) {
+            throw new IllegalArgumentException("Опция не принадлежит этому событию");
+        }
+
+        event.setStatus(EventStatus.FINISHED);
+        winningOption.setIsCorrectOutcome(true);
+        eventRepository.save(event);
+        eventOptionRepository.save(winningOption);
+
+        List<Prediction> allPredictions = predictionRepository.findAllByEvent(event);
+
+        for (Prediction prediction : allPredictions) {
+            if (prediction.getChosenOption().getId().equals(winningOptionId)) {
+                prediction.setStatus(org.example.bet.domain.PredictionStatus.WON);
+                
+                User winner = prediction.getUser();
+                winner.setSuccessfulPredictions(winner.getSuccessfulPredictions() + 1);
+                userRepository.save(winner);
+                
+            } else {
+                prediction.setStatus(org.example.bet.domain.PredictionStatus.LOST);
+            }
+            predictionRepository.save(prediction);
+        }
+    }
+
 
     @Transactional
     public void createEvent(CreateEventForm form) {
         Event event = new Event();
         event.setTitle(form.getTitle());
         event.setDescription(form.getDescription());
-        event.setStatus(EventStatus.PENDING); // исправлено на PENDING
-        event.setClosesAt(Instant.now().plusSeconds(86400)); // +1 день для примера
+        event.setStatus(EventStatus.PENDING);
+        event.setClosesAt(Instant.now().plusSeconds(86400));
 
-        // Создаем опции из списка строк
         List<EventOption> options = form.getOptions().stream().map(text -> {
             EventOption option = new EventOption();
             option.setText(text);
@@ -82,7 +124,7 @@ public class EventService {
                 event.getStatus().name(),
                 event.getClosesAt(),
                 event.getOptions().stream()
-                        .limit(3) // только первые 3 опции для отображения
+                        .limit(3)
                         .map(option -> new EventOptionViewModel(option.getId(), option.getText(), 0))
                         .collect(Collectors.toList())
         );

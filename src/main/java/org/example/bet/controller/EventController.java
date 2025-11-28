@@ -1,10 +1,15 @@
 package org.example.bet.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.example.bet.domain.Event;
+import org.example.bet.domain.User;
 import org.example.bet.models.EventListItemViewModel;
 import org.example.bet.models.form.CreateEventForm;
+import org.example.bet.repository.PredictionRepository;
 import org.example.bet.service.EventService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +28,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class EventController {
 
     private final EventService eventService;
+    private final PredictionRepository predictionRepository; 
+
 
     @GetMapping("/all")
     public String showAllEvents(@RequestParam(value = "page", defaultValue = "0") int page,
@@ -40,10 +47,20 @@ public class EventController {
         return "events/all";
     }
 
-    @GetMapping("/details/{id}")
-    public String eventDetails(@PathVariable("id") Long id, Model model) {
-        log.debug("Запрос деталей события с id: {}", id);
+      @GetMapping("/details/{id}")
+    public String eventDetails(@PathVariable("id") Long id, Model model, HttpSession session) {
         model.addAttribute("event", eventService.findEventById(id));
+        
+        User currentUser = (User) session.getAttribute("currentUser");
+        boolean hasVoted = false;
+        
+        if (currentUser != null) {
+            Event eventEntity = eventService.findEventWithStats(id);
+            hasVoted = predictionRepository.existsByUserAndEvent(currentUser, eventEntity);
+        }
+        
+        model.addAttribute("hasVoted", hasVoted);
+        
         return "events/details";
     }
 
@@ -89,5 +106,29 @@ public class EventController {
         redirectAttributes.addFlashAttribute("successMessage", "Событие успешно удалено");
         return "redirect:/events/all";
 
+    }
+
+
+    @PostMapping("/{id}/finish")
+    public String finishEvent(
+            @PathVariable("id") Long eventId,
+            @RequestParam("winningOptionId") Long winningOptionId,
+            jakarta.servlet.http.HttpSession session,
+            RedirectAttributes redirectAttributes
+    ) {
+        org.example.bet.domain.User currentUser = (org.example.bet.domain.User) session.getAttribute("currentUser");
+        
+        if (currentUser == null || currentUser.getRole() != org.example.bet.domain.UserRole.ADMIN) {
+            return "redirect:/login"; 
+        }
+
+        try {
+            eventService.finishEvent(eventId, winningOptionId);
+            redirectAttributes.addFlashAttribute("successMessage", "Событие завершено! Результаты пересчитаны.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Ошибка: " + e.getMessage());
+        }
+
+        return "redirect:/events/details/" + eventId;
     }
 }

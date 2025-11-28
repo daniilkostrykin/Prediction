@@ -9,7 +9,7 @@
         <li th:if="${session.currentUser == null}"><a href="/register">Регистрация</a></li>
 
         <li th:if="${session.currentUser != null}">
-            Привет, <span th:text="${session.currentUser.username}">User</span>!
+            Привет, <a href="/profile"><strong th:text="${session.currentUser.username}">User</strong></a>!
         </li>
         <li th:if="${session.currentUser != null}">
             <a href="/logout" role="button" class="secondary outline">Выход</a>

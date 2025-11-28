@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container">
+    <hgroup>
+        <h1>Личный кабинет</h1>
+        <p>Добро пожаловать, <strong th:text="${user.username}">User</strong>!</p>
+    </hgroup>
+
+    <div class="grid">
+        <article>
+            <header>Всего ставок</header>
+            <h2 th:text="${totalBets}">0</h2>
+        </article>
+        <article>
+            <header>Побед</header>
+            <h2 th:text="${wonBets}" style="color: green;">0</h2>
+        </article>
+        <article>
+            <header>Роль</header>
+            <h2 th:text="${user.role}">USER</h2>
+        </article>
+    </div>
+
+    <hr>
+
+    <h3>История ставок</h3>
+    
+    <div th:if="${history.empty}">
+        <p>Вы еще не сделали ни одной ставки. <a href="/events/all">Перейти к событиям?</a></p>
+    </div>
+
+    <table role="grid" th:if="${!history.empty}">
+        <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Событие</th>
+            <th>Ваш выбор</th>
+            <th>Статус</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="bet : ${history}">
+            <td th:text="${#dates.format(bet.createdAt, 'dd-MM-yyyy HH:mm')}"></td>
+            <td>
+                <a th:href="@{/events/details/{id}(id=${bet.event.id})}" 
+                   th:text="${bet.event.title}">Событие</a>
+            </td>
+            <td th:text="${bet.chosenOption.text}">Выбор</td>
+            <td>
+                <span th:if="${bet.status.name() == 'PLACED'}" data-tooltip="Ожидание">⏳ В игре</span>
+                <span th:if="${bet.status.name() == 'WON'}" style="color: green; font-weight: bold;">✅ Победа</span>
+                <span th:if="${bet.status.name() == 'LOST'}" style="color: red;">❌ Проигрыш</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

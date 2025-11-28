@@ -16,7 +16,7 @@
             <span th:text="${errorMessage}"></span>
         </div>
 
-
+        <div th:if="${!hasVoted}">
         <form method="post" th:action="@{/predictions/make}">
             
             <input type="hidden" name="eventId" th:value="${event.id}">
@@ -31,9 +31,12 @@
             </div>
             <button type="submit" style="margin-top: 15px;">Подтвердить выбор</button>
         </form>
-
+        </div>
         <hr>
-
+        <div th:if="${hasVoted}" style="padding: 20px; background-color: #f0f0f0; border-radius: 8px; text-align: center;">
+            <h3>✅ Вы уже сделали ставку в этом событии</h3>
+            <p>Дождитесь окончания события, чтобы узнать результат.</p>
+        </div>
         <form th:action="@{/events/delete/{id} (id=${event.id})}" th:method="GET"
               onsubmit="return confirm('Вы уверены, что хотите удалить это событие?')">
             <button type="submit" class="secondary outline">Удалить событие</button>
@@ -41,6 +44,30 @@
 
         <div style="margin-top: 10px;">
             <a href="/events/all" role="button" class="secondary">Назад к списку</a>
+        </div>
+
+        <div th:if="${session.currentUser != null and session.currentUser.role.name() == 'ADMIN' and event.status != 'FINISHED'}" 
+             style="margin-top: 30px; padding: 20px; border: 2px solid #ff5722; border-radius: 8px;">
+            
+            <h4 style="color: #ff5722;">👑 Админ-зона: Завершить событие</h4>
+            <p>Выберите, какой вариант победил. Это действие необратимо!</p>
+
+            <form method="post" th:action="@{/events/{id}/finish(id=${event.id})}">
+                <label>Победивший вариант:
+                    <select name="winningOptionId" required>
+                        <option value="" disabled selected>-- Выберите исход --</option>
+                        <option th:each="opt : ${event.optionsWithStats}" 
+                                th:value="${opt.optionId}" 
+                                th:text="${opt.text}"></option>
+                    </select>
+                </label>
+                <button type="submit" style="background-color: #ff5722; border-color: #ff5722;">Подтвердить результат</button>
+            </form>
+        </div>
+        
+        <div th:if="${event.status == 'FINISHED'}" style="margin-top: 20px; padding: 15px; background-color: #e8f5e9; border: 1px solid #4caf50; border-radius: 4px;">
+            <h3>🏁 Событие завершено</h3>
+    
         </div>
     </article>
 </main>

@@ -30,7 +30,10 @@ public class PredictionService {
         // 2. Найти событие по ID (form.eventId())
         Event event = eventRepository.findById(form.eventId())
                 .orElseThrow(() -> new IllegalArgumentException("Событие не найдено"));
-
+        
+                if (predictionRepository.existsByUserAndEvent(user, event)) {
+            throw new IllegalStateException("Вы уже сделали ставку на это событие! Повторная ставка запрещена.");
+        }
         if (event.getStatus() == EventStatus.CLOSED || event.getStatus() == EventStatus.FINISHED) {
             throw new IllegalStateException("Событие уже закрыто");
         }
