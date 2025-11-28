@@ -4,6 +4,8 @@
 <body>
     <main class="container">
         <h2>Вход</h2>
+        
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
         <form method="post" th:action="@{/login}" th:object="${loginForm}">
             <label>Имя пользователя
