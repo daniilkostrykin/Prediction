@@ -87,15 +87,22 @@ public class EventService {
         eventRepository.save(event);
     }
 
+    @Transactional
     public List<ShowEventInfoDto> findAllEvents() {
-        return eventRepository.findAll().stream()
+        List<Event> events = eventRepository.findAll();
+        for (Event event : events) {
+            event.getOptions().size();
+        }
+        return events.stream()
                 .map(this::mapToListItem)
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public ShowDetailedEventInfoDto findEventById(Long id) {
         Event event = eventRepository.findById(id)
             .orElseThrow(() -> new EventNotFoundException("Событие с ID " + id + " не найдено"));
+        event.getOptions().size(); 
         return new ShowDetailedEventInfoDto(
                 event.getId(),
                 event.getTitle(),
@@ -115,10 +122,14 @@ public class EventService {
         } else {
             page = eventRepository.findAll(pageable);
         }
+        for (Event event : page.getContent()) {
+            event.getOptions().size();
+        }
         return page.map(this::mapToListItem);
     }
 
     private ShowEventInfoDto mapToListItem(Event event) {
+        event.getOptions().size(); 
         return new ShowEventInfoDto(
                 event.getId(),
                 event.getTitle(),
@@ -138,9 +149,11 @@ public class EventService {
         eventRepository.deleteById(id);
     }
 
+    @Transactional
     public Event findEventWithStats(Long id){
         Event event = eventRepository.findById(id)
         .orElseThrow(() -> new EventNotFoundException("Событие с ID " + id + " не существует"));
+        event.getOptions().size(); 
         return event;
     }
 }

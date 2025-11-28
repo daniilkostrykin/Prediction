@@ -29,7 +29,7 @@ public class AuthController {
     public String registerPage(Model model) {
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto("","", "");
 
-        model.addAttribute("registrationForm", userRegistrationDto);
+        model.addAttribute("userRegistrationDto", userRegistrationDto);
 
         return "auth/register";
     }
