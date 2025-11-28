@@ -1,9 +1,18 @@
 <nav th:fragment="navbar">
     <ul>
-        <li><strong>Prediction App</strong></li>
+        <li><a href="/"><strong>Prediction App</strong></a></li>
+        <li><a href="/events/all">События</a></li> 
     </ul>
+    
     <ul>
-        <li><a href="/login">Вход</a></li>
-        <li><a href="/register">Регистрация</a></li>
+        <li th:if="${session.currentUser == null}"><a href="/login">Вход</a></li>
+        <li th:if="${session.currentUser == null}"><a href="/register">Регистрация</a></li>
+
+        <li th:if="${session.currentUser != null}">
+            Привет, <span th:text="${session.currentUser.username}">User</span>!
+        </li>
+        <li th:if="${session.currentUser != null}">
+            <a href="/logout" role="button" class="secondary outline">Выход</a>
+        </li>
     </ul>
 </nav>
