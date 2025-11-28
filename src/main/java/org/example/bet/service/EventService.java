@@ -7,9 +7,9 @@ import org.example.bet.domain.EventOption;
 import org.example.bet.domain.EventStatus;
 import org.example.bet.domain.Prediction;
 import org.example.bet.domain.User;
-import org.example.bet.models.EventDetailsViewModel;
-import org.example.bet.models.EventListItemViewModel;
-import org.example.bet.models.EventOptionViewModel;
+import org.example.bet.models.EventDetailsDto;
+import org.example.bet.models.EventSummaryDto;
+import org.example.bet.models.OptionDto;
 import org.example.bet.models.exceptions.EventNotFoundException;
 import org.example.bet.models.form.CreateEventForm;
 import org.example.bet.repository.EventOptionRepository;
@@ -86,28 +86,28 @@ public class EventService {
         eventRepository.save(event);
     }
 
-    public List<EventListItemViewModel> findAllEvents() {
+    public List<EventSummaryDto> findAllEvents() {
         return eventRepository.findAll().stream()
                 .map(this::mapToListItem)
                 .collect(Collectors.toList());
     }
 
-    public EventDetailsViewModel findEventById(Long id) {
+    public EventDetailsDto findEventById(Long id) {
         Event event = eventRepository.findById(id)
             .orElseThrow(() -> new EventNotFoundException("Событие с ID " + id + " не найдено"));
-        return new EventDetailsViewModel(
+        return new EventDetailsDto(
                 event.getId(),
                 event.getTitle(),
                 event.getDescription(),
                 event.getStatus().name(),
                 event.getClosesAt(),
                 event.getOptions().stream()
-                        .map(option -> new EventOptionViewModel(option.getId(), option.getText(), 0))
+                        .map(option -> new OptionDto(option.getId(), option.getText(), 0))
                         .collect(Collectors.toList())
         );
     }
 
-    public Page<EventListItemViewModel> searchEvents(String query, Pageable pageable) {
+    public Page<EventSummaryDto> searchEvents(String query, Pageable pageable) {
         Page<Event> page;
         if (query != null && !query.isEmpty()) {
             page = eventRepository.findByTitleContainingIgnoreCase(query, pageable);
@@ -117,15 +117,15 @@ public class EventService {
         return page.map(this::mapToListItem);
     }
 
-    private EventListItemViewModel mapToListItem(Event event) {
-        return new EventListItemViewModel(
+    private EventSummaryDto mapToListItem(Event event) {
+        return new EventSummaryDto(
                 event.getId(),
                 event.getTitle(),
                 event.getStatus().name(),
                 event.getClosesAt(),
                 event.getOptions().stream()
                         .limit(3)
-                        .map(option -> new EventOptionViewModel(option.getId(), option.getText(), 0))
+                        .map(option -> new OptionDto(option.getId(), option.getText(), 0))
                         .collect(Collectors.toList())
         );
     }

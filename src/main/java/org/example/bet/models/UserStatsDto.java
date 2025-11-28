@@ -1,6 +1,6 @@
 package org.example.bet.models;
 
-public record UserProfileViewModel(
+public record UserStatsDto(
         String username,
         int successfulPredictions,
         long totalPredictionsCount,

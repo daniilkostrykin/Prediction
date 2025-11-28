@@ -3,11 +3,11 @@ package org.example.bet.models;
 import java.time.Instant;
 import java.util.List;
 
-public record EventListItemViewModel(
+public record EventSummaryDto(
         Long id,
         String title,
         String status,
         Instant closesAt,
-        List<EventOptionViewModel> topOptions
+        List<OptionDto> topOptions
 ) {
 }

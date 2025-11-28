@@ -53,26 +53,22 @@ public class AuthController {
     }
     @PostMapping("/login")
     public String processLogin(@ModelAttribute LoginForm form, HttpSession session, Model model) {
-        // 1. Ищем юзера в БД
         Optional<User> userOpt = userRepository.findByUsername(form.username());
 
-        // 2. Простая проверка: юзер есть? пароль совпадает? (без шифрования)
         if (userOpt.isPresent() && userOpt.get().getPassword().equals(form.password())) {
             
-            // УРА! Записываем юзера в сессию (это аналог "войти")
             session.setAttribute("currentUser", userOpt.get());
             
-            return "redirect:/"; // Переход на главную
+            return "redirect:/";
         } else {
-            // Ошибка входа
             model.addAttribute("error", "Неверный логин или пароль");
-            return "auth/login"; // Возврат на форму
+            return "auth/login";
         }
     }
     
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.invalidate(); // Очищаем сессию
+        session.invalidate();
         return "redirect:/login";
     }
 }

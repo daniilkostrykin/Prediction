@@ -41,7 +41,6 @@ public class PredictionController {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
 
-        // 4. Возвращаемся на страницу события
         return "redirect:/events/details/" + form.eventId();
     }
 }

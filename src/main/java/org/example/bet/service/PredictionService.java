@@ -23,11 +23,9 @@ public class PredictionService {
 
     @Transactional
     public void makePrediction(Long userId, PlacePredictionForm form) {
-        // 1. Найти пользователя по ID
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден"));
 
-        // 2. Найти событие по ID (form.eventId())
         Event event = eventRepository.findById(form.eventId())
                 .orElseThrow(() -> new IllegalArgumentException("Событие не найдено"));
         
@@ -46,16 +44,13 @@ public class PredictionService {
             throw new IllegalStateException("Вы уже сделали предсказание на это событие");
         }
 
-        // 4. Найти выбранную опцию по ID (form.chosenOptionId())
         EventOption option = eventOptionRepository.findById(form.chosenOptionId())
                 .orElseThrow(() -> new IllegalArgumentException("Опция не найдена"));
 
-        // 5. Проверить, что эта опция реально принадлежит этому событию
         if (!option.getEvent().getId().equals(event.getId())) {
             throw new IllegalArgumentException("Неверная опция для этого события");
         }
 
-        // 6. Создать и сохранить Prediction
         Prediction prediction = new Prediction();
         prediction.setUser(user);
         prediction.setEvent(event);

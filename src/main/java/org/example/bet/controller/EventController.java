@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.example.bet.domain.Event;
 import org.example.bet.domain.User;
-import org.example.bet.models.EventListItemViewModel;
+import org.example.bet.models.EventSummaryDto;
 import org.example.bet.models.form.CreateEventForm;
 import org.example.bet.repository.PredictionRepository;
 import org.example.bet.service.EventService;
@@ -37,7 +37,7 @@ public class EventController {
                                 @RequestParam(value = "search", required = false) String search,
                                 Model model) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<EventListItemViewModel> eventPage = eventService.searchEvents(search, pageable);
+        Page<EventSummaryDto> eventPage = eventService.searchEvents(search, pageable);
 
         model.addAttribute("events", eventPage.getContent());
         model.addAttribute("currentPage", page);
