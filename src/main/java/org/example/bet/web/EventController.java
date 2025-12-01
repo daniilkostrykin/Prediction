@@ -11,7 +11,7 @@ import org.example.bet.dto.ShowEventInfoDto;
 import org.example.bet.dto.form.AddEventDto;
 import org.example.bet.models.enums.UserRole;
 import org.example.bet.repositories.PredictionRepository;
-import org.example.bet.services.EventService;
+import org.example.bet.services.EventServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class EventController {
 
-    private final EventService eventService;
+    private final EventServiceImpl eventServiceImpl;
     private final PredictionRepository predictionRepository; 
 
 
@@ -38,7 +38,7 @@ public class EventController {
                                 @RequestParam(value = "search", required = false) String search,
                                 Model model) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<ShowEventInfoDto> eventPage = eventService.searchEvents(search, pageable);
+        Page<ShowEventInfoDto> eventPage = eventServiceImpl.searchEvents(search, pageable);
 
         model.addAttribute("events", eventPage.getContent());
         model.addAttribute("currentPage", page);
@@ -50,13 +50,13 @@ public class EventController {
 
       @GetMapping("/details/{id}")
     public String eventDetails(@PathVariable("id") Long id, Model model, HttpSession session) {
-        model.addAttribute("event", eventService.findEventById(id));
+        model.addAttribute("event", eventServiceImpl.findEventById(id));
         
         User currentUser = (User) session.getAttribute("currentUser");
         boolean hasVoted = false;
         
         if (currentUser != null) {
-            Event eventEntity = eventService.findEventWithStats(id);
+            Event eventEntity = eventServiceImpl.findEventWithStats(id);
             hasVoted = predictionRepository.existsByUserAndEvent(currentUser, eventEntity);
         }
         
@@ -95,7 +95,7 @@ public class EventController {
             return "redirect:/events/add";
         }
 
-        eventService.createEvent(form);
+        eventServiceImpl.createEvent(form);
         redirectAttributes.addFlashAttribute("successMessage", "Событие успешно создано!");
         return "redirect:/events/all";
     }
@@ -103,7 +103,7 @@ public class EventController {
     @GetMapping("delete/{id}")
     public String deleteEvent(@PathVariable("id") Long id, RedirectAttributes redirectAttributes){
         log.debug("Удаление события: {}", id);
-        eventService.deleteEvent(id);
+        eventServiceImpl.deleteEvent(id);
         redirectAttributes.addFlashAttribute("successMessage", "Событие успешно удалено");
         return "redirect:/events/all";
 
@@ -124,7 +124,7 @@ public class EventController {
         }
 
         try {
-            eventService.finishEvent(eventId, winningOptionId);
+            eventServiceImpl.finishEvent(eventId, winningOptionId);
             redirectAttributes.addFlashAttribute("successMessage", "Событие завершено! Результаты пересчитаны.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Ошибка: " + e.getMessage());
