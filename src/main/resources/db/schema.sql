@@ -1,7 +1,6 @@
 -- Create schema if it doesn't exist
 CREATE SCHEMA IF NOT EXISTS prediction_schema;
-
--- Create users table
+/*
 CREATE TABLE IF NOT EXISTS prediction_schema.users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
@@ -51,4 +50,4 @@ CREATE TABLE IF NOT EXISTS prediction_schema.prediction_activities (
     activity_type VARCHAR(50) NOT NULL,
     description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+);*/

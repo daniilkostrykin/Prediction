@@ -1,17 +1,17 @@
-<nav th:fragment="navbar">
+<nav th:fragment="navbar" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <ul>
         <li><a href="/"><strong>Prediction App</strong></a></li>
-        <li><a href="/events/all">События</a></li> 
+        <li><a href="/events/all">События</a></li>
     </ul>
     
     <ul>
-        <li th:if="${session.currentUser == null}"><a href="/login">Вход</a></li>
-        <li th:if="${session.currentUser == null}"><a href="/register">Регистрация</a></li>
+        <li sec:authorize="isAnonymous()"><a href="/login">Вход</a></li>
+        <li sec:authorize="isAnonymous()"><a href="/register">Регистрация</a></li>
 
-        <li th:if="${session.currentUser != null}">
-            Привет, <a href="/profile"><strong th:text="${session.currentUser.username}">User</strong></a>!
+        <li sec:authorize="isAuthenticated()">
+            Привет, <a href="/profile"><strong sec:authentication="principal.username">User</strong></a>!
         </li>
-        <li th:if="${session.currentUser != null}">
+        <li sec:authorize="isAuthenticated()">
             <a href="/logout" role="button" class="secondary outline">Выход</a>
         </li>
     </ul>

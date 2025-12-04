@@ -1,7 +1,3 @@
--- Пользователи
-INSERT INTO prediction_schema.users (username, password_hash, email, role, successful_predictions) VALUES
-('admin', '12345', 'admin@example.com', 'ADMIN', 0),
-('user1', '12345', 'user1@example.com', 'USER', 0);
 
 -- События (10 карточек)
 INSERT INTO prediction_schema.events (title, description, status, closes_at) VALUES

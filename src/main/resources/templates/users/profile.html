@@ -13,11 +13,11 @@
     <div class="grid">
         <article>
             <header>Всего ставок</header>
-            <h2 th:text="${totalBets}">0</h2>
+            <h2 th:text="${totalPredictions}">0</h2>
         </article>
         <article>
             <header>Побед</header>
-            <h2 th:text="${wonBets}" style="color: green;">0</h2>
+            <h2 th:text="${wonPredictions}" style="color: green;">0</h2>
         </article>
         <article>
             <header>Роль</header>
@@ -43,17 +43,17 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="bet : ${history}">
-            <td th:text="${#dates.format(bet.createdAt, 'dd-MM-yyyy HH:mm')}"></td>
+        <tr th:each="prediction : ${history}">
+            <td th:text="${#dates.format(prediction.createdAt, 'dd-MM-yyyy HH:mm')}"></td>
             <td>
-                <a th:href="@{/events/details/{id}(id=${bet.event.id})}" 
-                   th:text="${bet.event.title}">Событие</a>
+                <a th:href="@{/events/details/{id}(id=${prediction.event.id})}" 
+                   th:text="${prediction.event.title}">Событие</a>
             </td>
-            <td th:text="${bet.chosenOption.text}">Выбор</td>
+            <td th:text="${prediction.chosenOption.text}">Выбор</td>
             <td>
-                <span th:if="${bet.status.name() == 'PLACED'}" data-tooltip="Ожидание">⏳ В игре</span>
-                <span th:if="${bet.status.name() == 'WON'}" style="color: green; font-weight: bold;">✅ Победа</span>
-                <span th:if="${bet.status.name() == 'LOST'}" style="color: red;">❌ Проигрыш</span>
+                <span th:if="${prediction.status.name() == 'PLACED'}" data-tooltip="Ожидание">⏳ В игре</span>
+                <span th:if="${prediction.status.name() == 'WON'}" style="color: green; font-weight: bold;">✅ Победа</span>
+                <span th:if="${prediction.status.name() == 'LOST'}" style="color: red;">❌ Проигрыш</span>
             </td>
         </tr>
         </tbody>
