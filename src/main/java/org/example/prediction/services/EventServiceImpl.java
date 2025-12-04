@@ -173,6 +173,10 @@ public class EventServiceImpl implements EventService {
         if (!eventRepository.existsById(id)) {
             throw new EventNotFoundException("Событие с ID " + id + " не найдено для удаления");
         }
+        
+        // Удаляем все прогнозы, связанные с этим событием, чтобы избежать нарушения целостности БД
+        predictionRepository.deleteAllByEventId(id);
+        
         eventRepository.deleteById(id);
     }
     @Override
