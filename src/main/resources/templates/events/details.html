@@ -35,8 +35,8 @@
         </form>
         </div>
         <hr>
-        <div th:if="${hasVoted}" style="padding: 20px; background-color: #f0f0f0; border-radius: 8px; text-align: center;">
-            <h3>✅ Вы уже сделали предсказание в этом событии</h3>
+        <div th:if="${hasVoted}" style="padding: 20px; border-left: 5px solid #4caf50; border-radius: 8px; text-align: center;">
+            <h3>✅ Вы сделали предсказание в этом событии</h3>
             <p>Дождитесь окончания события, чтобы узнать результат.</p>
         </div>
         <!-- Блок для администратора: кнопки управления событием -->
@@ -69,13 +69,14 @@
             </div>
         </div>
     
-        <div style="margin-top: 10px;">
-            <a href="/events/all" role="button" class="secondary">Назад к списку</a>
-        </div>
+    
         
-        <div th:if="${event.status == 'FINISHED'}" style="margin-top: 20px; padding: 15px; background-color: #e8f5e9; border: 1px solid #4caf50; border-radius: 4px;">
+        <div th:if="${event.status == 'FINISHED'}" style="margin-top: 20px; padding: 15px; border-left: 5px solid #4caf50; border-radius: 4px; text-align: center;">
             <h3> Событие завершено</h3>
     
+        </div>
+            <div style="margin-top: 10px;">
+            <a href="/events/all" role="button" class="secondary">Назад к списку</a>
         </div>
     </article>
 </main>

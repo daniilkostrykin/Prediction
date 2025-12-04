@@ -15,13 +15,31 @@
             <textarea th:field="*{description}"></textarea>
         </label>
 
-        <label>Вариант 1
-            <input type="text" th:field="*{options[0]}" >
-            <small class="text-danger" th:if="${#fields.hasErrors('options')}" th:errors="*{options}"></small>
-        </label>
-        <label>Вариант 2
-            <input type="text" th:field="*{options[1]}" >
-        </label>
+        <label>Варианты ответа</label>
+        
+        <div th:each="option, stat : *{options}" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
+            
+            <input type="text" 
+                   th:field="*{options[__${stat.index}__]}" 
+                   placeholder="Введите вариант..." 
+                   style="margin-bottom: 0;">
+            
+            <button type="submit" 
+                    name="removeOption" 
+                    th:value="${stat.index}" 
+                    class="outline secondary" 
+                    style="width: auto; padding: 5px 10px; margin-bottom: 0;">
+                X
+            </button>
+            
+            <small class="text-danger" 
+                   th:if="${#fields.hasErrors('options[' + stat.index + ']')}" 
+                   th:errors="*{options[__${stat.index}__]}"></small>
+        </div>
+
+        <button type="submit" name="addOption" class="secondary outline" formnovalidate>
+            + Добавить вариант
+        </button>
 
         <label>Дата окончания приёма предсказаний
             <input type="datetime-local" th:field="*{closesAt}" >

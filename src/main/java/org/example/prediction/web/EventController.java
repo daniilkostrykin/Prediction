@@ -73,7 +73,7 @@ public class EventController {
 
     @ModelAttribute("createEventForm")
     public AddEventDto initCreateForm(){
-        return new AddEventDto("", "", java.util.Arrays.asList("", ""), null);
+        return new AddEventDto("", "", new java.util.ArrayList<>(java.util.Arrays.asList("", "")), null);
     }
 
     @GetMapping("/add")
@@ -132,5 +132,24 @@ public class EventController {
         }
 
         return "redirect:/events/details/" + eventId;
+    }
+
+    @PostMapping(value = "/add", params = "addOption")
+    public String addOption(@ModelAttribute("createEventForm") AddEventDto form) {
+        if (form.getOptions() == null) {
+            form.setOptions(new java.util.ArrayList<>());
+        }
+        form.getOptions().add("");
+        
+        return "events/add";
+    }
+
+     @PostMapping(value = "/add", params = "removeOption")
+    public String removeOption(@ModelAttribute("createEventForm") AddEventDto form,
+                               @RequestParam("removeOption") int index) {
+        if (form.getOptions() != null && form.getOptions().size() > index) {
+            form.getOptions().remove(index);
+        }
+        return "events/add";
     }
 }

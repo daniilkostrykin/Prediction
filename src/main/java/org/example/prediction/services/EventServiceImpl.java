@@ -71,13 +71,19 @@ public class EventServiceImpl implements EventService {
         java.time.ZoneId zoneId = java.time.ZoneId.systemDefault();
         event.setClosesAt(form.getClosesAt().atZone(zoneId).toInstant());
 
-        List<EventOption> options = form.getOptions().stream().map(text -> {
+        List<EventOption> options = form.getOptions().stream()
+        .filter(text -> text != null && !text.trim().isEmpty()) 
+        .map(text -> {
             EventOption option = new EventOption();
             option.setText(text);
             option.setEvent(event);
             option.setIsCorrectOutcome(false);
             return option;
         }).collect(Collectors.toList());
+
+        if (options.size() < 2) {
+             throw new IllegalArgumentException("Должно быть минимум 2 заполненных варианта");
+        }
 
         event.setOptions(options);
         eventRepository.save(event);
