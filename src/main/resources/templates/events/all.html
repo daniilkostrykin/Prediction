@@ -25,7 +25,11 @@
         <div th:each="event : ${events}" class="card" style="border: 1px solid #ccc; padding: 20px; margin-bottom: 20px; border-radius: 8px;">
             <header>
                 <h3 th:text="${event.title}" style="margin-bottom: 5px;">Название события</h3>
-                <small th:text="${event.status}" style="color: grey;">STATUS</small>
+                <small th:switch="${event.status}">
+                    <span th:case="'ACTIVE'"  style="background-color: #2e7d32; color: white; padding: 2px 6px; border-radius: 4px;">Активно</span>
+                    <span th:case="'CLOSED'"  style="background-color: #f57f17; color: white; padding: 2px 6px; border-radius: 4px;">Закрыто</span>
+                    <span th:case="'FINISHED'" style="background-color: #c62828; color: white; padding: 2px 6px; border-radius: 4px;">Завершено</span>
+                </small>
             </header>
             
             <p>Закрытие: <span th:text="${#dates.format(event.closesAt, 'dd-MM-yyyy HH:mm')}"></span></p>

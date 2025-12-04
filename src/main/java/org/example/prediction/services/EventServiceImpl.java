@@ -24,8 +24,6 @@ import org.example.prediction.repositories.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,7 +66,10 @@ public class EventServiceImpl implements EventService {
 
         Event event = mapper.map(form, Event.class);
         event.setStatus(EventStatus.PENDING);
-        event.setClosesAt(Instant.now().plusSeconds(86400));
+        //event.setClosesAt(Instant.now().plusSeconds(86400));
+
+        java.time.ZoneId zoneId = java.time.ZoneId.systemDefault();
+        event.setClosesAt(form.getClosesAt().atZone(zoneId).toInstant());
 
         List<EventOption> options = form.getOptions().stream().map(text -> {
             EventOption option = new EventOption();

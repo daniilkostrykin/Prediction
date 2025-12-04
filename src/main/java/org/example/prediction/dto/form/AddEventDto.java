@@ -1,10 +1,15 @@
 package org.example.prediction.dto.form;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public class AddEventDto implements java.io.Serializable {
     @NotBlank(message = "Название события не может быть пустым")
@@ -18,14 +23,20 @@ public class AddEventDto implements java.io.Serializable {
     @Size(min = 2, message = "Не менее 2-х вариантов выбора")
     private List<String> options;
 
+    @NotNull(message = "Укажите дату и время окончания события")
+    @Future(message = "Дата и время окончания должны быть в будущем")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime closesAt;
+
     // Конструктор по умолчанию
     public AddEventDto() {}
 
     // Конструктор с параметрами
-    public AddEventDto(String title, String description, List<String> options) {
+    public AddEventDto(String title, String description, List<String> options, LocalDateTime closesAt) {
         this.title = title;
         this.description = description;
         this.options = options;
+        this.closesAt = closesAt;
     }
 
     // Геттеры и сеттеры
@@ -52,4 +63,7 @@ public class AddEventDto implements java.io.Serializable {
     public void setOptions(List<String> options) {
         this.options = options;
     }
+
+    public LocalDateTime getClosesAt() { return closesAt; }
+    public void setClosesAt(LocalDateTime closesAt) { this.closesAt = closesAt; }
 }

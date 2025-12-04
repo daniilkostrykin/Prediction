@@ -23,6 +23,11 @@
             <input type="text" th:field="*{options[1]}" >
         </label>
 
+        <label>Дата окончания приёма предсказаний
+            <input type="datetime-local" th:field="*{closesAt}" >
+            <small class="text-danger" th:if="${#fields.hasErrors('closesAt')}" th:errors="*{closesAt}"></small>
+        </label>
+
         <button type="submit">Создать</button>
     </form>
 </main>

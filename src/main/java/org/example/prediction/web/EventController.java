@@ -73,7 +73,7 @@ public class EventController {
 
     @ModelAttribute("createEventForm")
     public AddEventDto initCreateForm(){
-        return new AddEventDto("", "", java.util.Arrays.asList("", ""));
+        return new AddEventDto("", "", java.util.Arrays.asList("", ""), null);
     }
 
     @GetMapping("/add")

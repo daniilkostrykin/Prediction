@@ -28,7 +28,7 @@ public class SecurityConfig {
         log.debug("Настройка SecurityFilterChain");
         http
             .authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/register", "/login", "/css/**", "/js/**", "/").permitAll()
+                .requestMatchers("/register", "/login", "/events/all", "/css/**", "/js/**", "/").permitAll()
                 .requestMatchers("/events/add", "/events/delete/**", "/events/*/finish").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
