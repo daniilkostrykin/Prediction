@@ -5,11 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.example.prediction.models.entities.Event;
-import org.example.prediction.models.entities.User;
 import org.example.prediction.dto.ShowEventInfoDto;
 import org.example.prediction.dto.form.AddEventDto;
-import org.example.prediction.models.enums.UserRole;
 import org.example.prediction.repositories.PredictionRepository;
+import org.example.prediction.services.EventService;
 import org.example.prediction.services.EventServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,7 +29,7 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class EventController {
 
-    private final EventServiceImpl eventServiceImpl;
+    private final EventService eventService;
     private final PredictionRepository predictionRepository; 
 
 
@@ -40,7 +39,7 @@ public class EventController {
                                 @RequestParam(value = "search", required = false) String search,
                                 Model model) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<ShowEventInfoDto> eventPage = eventServiceImpl.searchEvents(search, pageable);
+        Page<ShowEventInfoDto> eventPage = eventService.searchEvents(search, pageable);
 
         model.addAttribute("events", eventPage.getContent());
         model.addAttribute("currentPage", page);
@@ -52,17 +51,18 @@ public class EventController {
 
       @GetMapping("/details/{id}")
       public String eventDetails(@PathVariable("id") Long id, Model model, Principal principal) {
-          model.addAttribute("event", eventServiceImpl.findEventById(id));
+          model.addAttribute("event", eventService.findEventById(id));
   
           boolean hasVoted = false;
           
           if (principal != null) {
               String username = principal.getName();
-              Event eventEntity = eventServiceImpl.findEventWithStats(id);
-              hasVoted = predictionRepository.existsByUserUsernameAndEvent(username, eventEntity);
-              
+              //Event eventEntity = eventService.findEventWithStats(id);
+              //hasVoted = predictionRepository.existsByUserUsernameAndEvent(username, eventEntity);
+              hasVoted = predictionRepository.existsByUserUsernameAndEventId(username, id);
+
               // Получаем информацию о текущем пользователе для проверки прав администратора
-              org.example.prediction.models.entities.User currentUser = eventServiceImpl.getCurrentUserByUsername(username);
+              org.example.prediction.models.entities.User currentUser = eventService.getCurrentUserByUsername(username);
               model.addAttribute("currentUser", currentUser);
           }
           
@@ -101,7 +101,7 @@ public class EventController {
             return "redirect:/events/add";
         }
 
-        eventServiceImpl.createEvent(form);
+        eventService.createEvent(form);
         redirectAttributes.addFlashAttribute("successMessage", "Событие успешно создано!");
         return "redirect:/events/all";
     }
@@ -110,7 +110,7 @@ public class EventController {
     @GetMapping("delete/{id}")
     public String deleteEvent(@PathVariable("id") Long id, RedirectAttributes redirectAttributes){
         log.debug("Удаление события: {}", id);
-        eventServiceImpl.deleteEvent(id);
+        eventService.deleteEvent(id);
         redirectAttributes.addFlashAttribute("successMessage", "Событие успешно удалено");
         return "redirect:/events/all";
 
@@ -125,7 +125,7 @@ public class EventController {
             RedirectAttributes redirectAttributes
     ) {
         try {
-            eventServiceImpl.finishEvent(eventId, winningOptionId);
+            eventService.finishEvent(eventId, winningOptionId);
             redirectAttributes.addFlashAttribute("successMessage", "Событие завершено! Результаты пересчитаны.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Ошибка: " + e.getMessage());

@@ -13,4 +13,5 @@ public interface PredictionRepository extends JpaRepository<Prediction, Long> {
     List<Prediction> findByUserOrderByCreatedAtDesc(User user);
     List<Prediction> findAllByEvent(Event event);
     void deleteAllByEventId(Long eventId);
+    boolean existsByUserUsernameAndEventId(String username, Long id);
 }

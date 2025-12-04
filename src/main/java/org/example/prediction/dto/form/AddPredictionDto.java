@@ -1,7 +1,7 @@
 package org.example.prediction.dto.form;
 
 
-public class AddPredictionDto {
+public class AddPredictionDto implements java.io.Serializable {
     private Long eventId;
     private Long chosenOptionId;
 

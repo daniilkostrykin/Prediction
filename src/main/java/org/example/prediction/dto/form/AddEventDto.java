@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
-public class AddEventDto {
+public class AddEventDto implements java.io.Serializable {
     @NotBlank(message = "Название события не может быть пустым")
     @Size(min = 5, max = 100, message = "Название должно быть от 5 до 100 символов")
     private String title;

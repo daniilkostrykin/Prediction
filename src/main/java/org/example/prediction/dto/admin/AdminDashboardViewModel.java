@@ -1,6 +1,6 @@
 package org.example.prediction.dto.admin;
 
-public class AdminDashboardViewModel {
+public class AdminDashboardViewModel implements java.io.Serializable {
     private long totalUsers;
     private long activeEvents;
     private long predictionsMadeToday;

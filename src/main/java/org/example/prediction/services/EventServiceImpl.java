@@ -122,7 +122,7 @@ public class EventServiceImpl implements EventService {
     @Override
     @Cacheable(value = "event", key = "#id")
     public ShowDetailedEventInfoDto findEventById(Long id) {
-        Event event = eventRepository.findById(id)
+        Event event = eventRepository.findByIdWithOptions(id)
                 .orElseThrow(() -> new EventNotFoundException("Событие с ID " + id + " не найдено"));
         return mapper.map(event, ShowDetailedEventInfoDto.class);
     }

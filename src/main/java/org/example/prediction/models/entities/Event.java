@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.prediction.models.enums.EventStatus;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.Instant;
 import java.util.List;
@@ -25,6 +26,7 @@ public class Event extends BaseEntity{
     @Column(nullable = false)
     private EventStatus status; // PENDING, ACTIVE, CLOSED, FINISHED
 
+    @BatchSize(size = 20)
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventOption> options;
 

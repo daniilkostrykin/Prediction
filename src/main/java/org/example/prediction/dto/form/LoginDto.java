@@ -1,6 +1,6 @@
 package org.example.prediction.dto.form;
 
-public class LoginDto {
+public class LoginDto implements java.io.Serializable {
     private String username;
     private String password;
 

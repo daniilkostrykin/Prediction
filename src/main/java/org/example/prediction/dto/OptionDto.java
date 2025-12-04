@@ -1,6 +1,6 @@
 package org.example.prediction.dto;
 
-public class OptionDto {
+public class OptionDto implements java.io.Serializable {
     private Long optionId;
     private String text;
     private int percentage;

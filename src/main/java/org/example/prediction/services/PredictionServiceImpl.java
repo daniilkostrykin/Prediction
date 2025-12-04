@@ -38,14 +38,14 @@ public class PredictionServiceImpl implements PredictionService {
                 .orElseThrow(() -> new IllegalArgumentException("Событие не найдено"));
         
                 if (predictionRepository.existsByUserAndEvent(user, event)) {
-            throw new IllegalStateException("Вы уже сделали ставку на это событие! Повторная ставка запрещена.");
+            throw new IllegalStateException("Вы уже сделали предсказание на это событие! Повторная ставка запрещена.");
         }
         if (event.getStatus() == EventStatus.CLOSED || event.getStatus() == EventStatus.FINISHED) {
             throw new IllegalStateException("Событие уже закрыто");
         }
 
         if (event.getClosesAt().isBefore(Instant.now())) {
-            throw new IllegalStateException("Время для ставок истекло");
+            throw new IllegalStateException("Время для предсказаний истекло");
         }
 
         if (predictionRepository.existsByUserAndEvent(user, event)) {

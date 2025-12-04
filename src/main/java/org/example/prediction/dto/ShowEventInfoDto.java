@@ -3,7 +3,7 @@ package org.example.prediction.dto;
 import java.time.Instant;
 import java.util.List;
 
-public class ShowEventInfoDto {
+public class ShowEventInfoDto implements java.io.Serializable {
     private Long id;
     private String title;
     private String status;

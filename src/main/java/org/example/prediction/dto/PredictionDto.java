@@ -2,7 +2,7 @@ package org.example.prediction.dto;
 
 import java.time.Instant;
 
-public class PredictionDto {
+public class PredictionDto implements java.io.Serializable {
     private String eventTitle;
     private String prediction;
     private String status;

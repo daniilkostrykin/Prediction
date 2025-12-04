@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.List;
 
 
-public class ShowDetailedEventInfoDto {
+public class ShowDetailedEventInfoDto implements java.io.Serializable {
     private Long id;
     private String title;
     private String description;

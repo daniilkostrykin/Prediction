@@ -1,6 +1,6 @@
 package org.example.prediction.dto.form;
 
-public class UserRegistrationDto {
+public class UserRegistrationDto implements java.io.Serializable {
     private String username;
     private String email;
     private String password;

@@ -1,6 +1,6 @@
 package org.example.prediction.dto;
 
-public class UserStatsDto {
+public class UserStatsDto implements java.io.Serializable {
     private String username;
     private int successfulPredictions;
     private long totalPredictionsCount;
