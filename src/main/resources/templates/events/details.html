@@ -11,14 +11,14 @@
         <p th:text="${event.description}"></p>
         <p><strong>Статус:</strong> <span th:text="${event.status}"></span></p>
 
-        <div th:if="${successMessage}" style="background-color: #d4edda; color: #155724; padding: 10px; margin-bottom: 10px; border-radius: 4px;">
+        <article th:if="${successMessage}" class="secondary" style="margin-bottom: 1rem; border-left: 5px solid green;">
             <span th:text="${successMessage}"></span>
-        </div>
-        <div th:if="${errorMessage}" style="background-color: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 10px; border-radius: 4px;">
+        </article>
+        <article th:if="${errorMessage}" class="secondary" style="margin-bottom: 1rem; border-left: 5px solid red;">
             <span th:text="${errorMessage}"></span>
-        </div>
+        </article>
 
-        <div th:if="${!hasVoted}">
+        <div th:if="${!hasVoted and currentUser != null and currentUser.role.name() != 'ADMIN'}">
         <form method="post" th:action="@{/predictions/make}">
             
             <input type="hidden" name="eventId" th:value="${event.id}">
