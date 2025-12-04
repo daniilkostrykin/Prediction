@@ -1,18 +1,22 @@
-<nav th:fragment="navbar" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<nav th:fragment="navbar" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+     xmlns:th="http://www.w3.org/1999/xhtml" class="container">
     <ul>
         <li><a href="/"><strong>Prediction App</strong></a></li>
         <li><a href="/events/all">События</a></li>
+        <li><a href="/events/add">Новое событие</a></li>
     </ul>
-    
+
     <ul>
         <li sec:authorize="isAnonymous()"><a href="/login">Вход</a></li>
         <li sec:authorize="isAnonymous()"><a href="/register">Регистрация</a></li>
 
         <li sec:authorize="isAuthenticated()">
-            Привет, <a href="/profile"><strong sec:authentication="principal.username">User</strong></a>!
+            <a href="/profile">Профиль</a>
         </li>
         <li sec:authorize="isAuthenticated()">
-            <a href="/logout" role="button" class="secondary outline">Выход</a>
+            <form th:action="@{/logout}" method="post" style="margin: 0;">
+                <button type="submit" class="secondary outline">Выход</button>
+            </form>
         </li>
     </ul>
 </nav>
