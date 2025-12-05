@@ -6,11 +6,9 @@ public class UserStatsDto implements java.io.Serializable {
     private long totalPredictionsCount;
     private double successRate;
 
-    // Конструктор по умолчанию для ModelMapper
     public UserStatsDto() {
     }
 
-    // Основной конструктор
     public UserStatsDto(String username, int successfulPredictions, long totalPredictionsCount, double successRate) {
         this.username = username;
         this.successfulPredictions = successfulPredictions;
@@ -18,7 +16,6 @@ public class UserStatsDto implements java.io.Serializable {
         this.successRate = successRate;
     }
 
-    // Геттеры и сеттеры
     public String getUsername() {
         return username;
     }

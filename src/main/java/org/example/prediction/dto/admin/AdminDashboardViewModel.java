@@ -5,18 +5,15 @@ public class AdminDashboardViewModel implements java.io.Serializable {
     private long activeEvents;
     private long predictionsMadeToday;
 
-    // Конструктор по умолчанию для ModelMapper
     public AdminDashboardViewModel() {
     }
 
-    // Основной конструктор
     public AdminDashboardViewModel(long totalUsers, long activeEvents, long predictionsMadeToday) {
         this.totalUsers = totalUsers;
         this.activeEvents = activeEvents;
         this.predictionsMadeToday = predictionsMadeToday;
     }
 
-    // Геттеры и сеттеры
     public long getTotalUsers() {
         return totalUsers;
     }

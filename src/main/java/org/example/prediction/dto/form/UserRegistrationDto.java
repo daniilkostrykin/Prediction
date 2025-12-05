@@ -5,18 +5,15 @@ public class UserRegistrationDto implements java.io.Serializable {
     private String email;
     private String password;
 
-    // Конструктор по умолчанию для ModelMapper
     public UserRegistrationDto() {
     }
 
-    // Основной конструктор
     public UserRegistrationDto(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
     }
 
-    // Геттеры и сеттеры
     public String getUsername() {
         return username;
     }
@@ -41,7 +38,6 @@ public class UserRegistrationDto implements java.io.Serializable {
         this.password = password;
     }
     
-    // Сохраняем методы вида record для совместимости с контроллерами
     public String username() {
         return username;
     }

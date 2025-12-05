@@ -5,17 +5,14 @@ public class AddPredictionDto implements java.io.Serializable {
     private Long eventId;
     private Long chosenOptionId;
 
-    // Конструктор по умолчанию для ModelMapper
     public AddPredictionDto() {
     }
 
-    // Основной конструктор
     public AddPredictionDto(Long eventId, Long chosenOptionId) {
         this.eventId = eventId;
         this.chosenOptionId = chosenOptionId;
     }
 
-    // Геттеры и сеттеры
     public Long getEventId() {
         return eventId;
     }
