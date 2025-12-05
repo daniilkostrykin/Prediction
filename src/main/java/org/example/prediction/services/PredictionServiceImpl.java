@@ -12,7 +12,6 @@ import org.example.prediction.repositories.EventOptionRepository;
 import org.example.prediction.repositories.EventRepository;
 import org.example.prediction.repositories.PredictionRepository;
 import org.example.prediction.repositories.UserRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +26,6 @@ public class PredictionServiceImpl implements PredictionService {
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
     private final EventOptionRepository eventOptionRepository;
-    private final ModelMapper mapper;
-
     @Transactional
     public void makePrediction(Long userId, AddPredictionDto form) {
         User user = userRepository.findById(userId)

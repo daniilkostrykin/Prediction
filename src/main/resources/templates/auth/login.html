@@ -4,7 +4,7 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <body>
-    <main class="container">
+    <main class="container" style="width: auto;">
         <h2>Вход</h2>
         
         <div th:if="${param.error}" class="alert alert-danger" th:text="${error} ?: 'Неправильный логин или пароль'}"></div>

@@ -5,18 +5,15 @@ public class OptionDto implements java.io.Serializable {
     private String text;
     private int percentage;
 
-    // Конструктор по умолчанию для ModelMapper
     public OptionDto() {
     }
 
-    // Основной конструктор
     public OptionDto(Long optionId, String text, int percentage) {
         this.optionId = optionId;
         this.text = text;
         this.percentage = percentage;
     }
 
-    // Геттеры и сеттеры
     public Long getOptionId() {
         return optionId;
     }

@@ -8,11 +8,9 @@ public class PredictionDto implements java.io.Serializable {
     private String status;
     private Instant createdAt;
 
-    // Конструктор по умолчанию для ModelMapper
     public PredictionDto() {
     }
 
-    // Основной конструктор
     public PredictionDto(String eventTitle, String prediction, String status, Instant createdAt) {
         this.eventTitle = eventTitle;
         this.prediction = prediction;
@@ -20,7 +18,6 @@ public class PredictionDto implements java.io.Serializable {
         this.createdAt = createdAt;
     }
 
-    // Геттеры и сеттеры
     public String getEventTitle() {
         return eventTitle;
     }

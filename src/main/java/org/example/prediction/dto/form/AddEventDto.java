@@ -28,10 +28,8 @@ public class AddEventDto implements java.io.Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime closesAt;
 
-    // Конструктор по умолчанию
     public AddEventDto() {}
 
-    // Конструктор с параметрами
     public AddEventDto(String title, String description, List<String> options, LocalDateTime closesAt) {
         this.title = title;
         this.description = description;
@@ -39,7 +37,6 @@ public class AddEventDto implements java.io.Serializable {
         this.closesAt = closesAt;
     }
 
-    // Геттеры и сеттеры
     public String getTitle() {
         return title;
     }

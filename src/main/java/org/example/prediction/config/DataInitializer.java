@@ -1,7 +1,7 @@
 package org.example.prediction.config;
 
-import org.example.prediction.models.entities.User; // Твой класс User
-import org.example.prediction.repositories.UserRepository; // Твой репозиторий
+import org.example.prediction.models.entities.User;
+import org.example.prediction.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,17 +15,14 @@ public class DataInitializer {
     public CommandLineRunner initData(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             System.out.println("Запуск инициализации данных");
-            // Проверяем, есть ли админ, чтобы не создавать дубликаты
-            // (хотя с ddl-auto=create это не обязательно, но полезно на будущее)
             if (userRepository.findByUsername("admin").isEmpty()) {
                 System.out.println("Создание администратора...");
                 User admin = new User();
                 admin.setUsername("admin");
-                // САМОЕ ВАЖНОЕ: Здесь пароль "12345" превращается в хеш
                 String encodedPassword = passwordEncoder.encode("12345");
                 admin.setPassword(encodedPassword);
                 admin.setEmail("admin@example.com");
-                admin.setRole(UserRole.ADMIN); // Используем правильный enum
+                admin.setRole(UserRole.ADMIN);
                 admin.setSuccessfulPredictions(0);
 
                 userRepository.save(admin);

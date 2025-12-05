@@ -4,17 +4,14 @@ public class LoginDto implements java.io.Serializable {
     private String username;
     private String password;
 
-    // Конструктор по умолчанию для ModelMapper
     public LoginDto() {
     }
 
-    // Основной конструктор
     public LoginDto(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    // Геттеры и сеттеры
     public String getUsername() {
         return username;
     }
@@ -31,7 +28,6 @@ public class LoginDto implements java.io.Serializable {
         this.password = password;
     }
     
-    // Сохраняем методы вида record для совместимости с контроллерами
     public String username() {
         return username;
     }

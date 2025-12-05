@@ -33,10 +33,10 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .formLogin((form) -> form
-                .loginPage("/login") // Показываем эту страницу при GET /login
-                .loginProcessingUrl("/login") // <--- ВАЖНО: Перехватываем POST /login здесь
-                .defaultSuccessUrl("/", true) // Куда кидать после успеха
-                .failureHandler(customAuthenticationFailureHandler) // Используем кастомный обработчик ошибок
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/", true)
+                .failureHandler(customAuthenticationFailureHandler)
                 .permitAll()
             )
             .logout((logout) -> logout

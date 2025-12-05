@@ -12,11 +12,9 @@ public class ShowDetailedEventInfoDto implements java.io.Serializable {
     private Instant closesAt;
     private List<OptionDto> optionsWithStats;
 
-    // Конструктор по умолчанию для ModelMapper
     public ShowDetailedEventInfoDto() {
     }
 
-    // Основной конструктор
     public ShowDetailedEventInfoDto(Long id, String title, String description, String status, Instant closesAt, List<OptionDto> optionsWithStats) {
         this.id = id;
         this.title = title;
@@ -26,7 +24,6 @@ public class ShowDetailedEventInfoDto implements java.io.Serializable {
         this.optionsWithStats = optionsWithStats != null ? optionsWithStats : List.of();
     }
 
-    // Геттеры и сеттеры
     public Long getId() {
         return id;
     }
