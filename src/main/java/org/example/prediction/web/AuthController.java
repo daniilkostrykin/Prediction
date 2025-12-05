@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.prediction.dto.form.UserRegistrationDto;
 import org.example.prediction.services.AuthService;
-import org.example.prediction.repositories.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class AuthController {
     private final AuthService authService;
-    private final UserRepository userRepository;
-
     @GetMapping("/login")
     public String loginPage(Model model){
         log.debug("Отображение страницы входа");

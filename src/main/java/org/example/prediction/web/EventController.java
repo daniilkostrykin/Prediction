@@ -4,15 +4,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.example.prediction.models.entities.Event;
 import org.example.prediction.dto.ShowEventInfoDto;
 import org.example.prediction.dto.form.AddEventDto;
 import org.example.prediction.repositories.PredictionRepository;
 import org.example.prediction.services.EventService;
-import org.example.prediction.services.EventServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,17 +34,20 @@ public class EventController {
 
     @GetMapping("/all")
     public String showAllEvents(@RequestParam(value = "page", defaultValue = "0") int page,
-                                @RequestParam(value = "size", defaultValue = "5") int size,
+                                @RequestParam(value = "size", defaultValue = "2") int size,
                                 @RequestParam(value = "search", required = false) String search,
+                                @RequestParam(value = "filter", defaultValue = "active") String filter,
                                 Model model) {
-        Pageable pageable = PageRequest.of(page, size);
+        Sort sort = Sort.by("status").ascending().and(Sort.by("closesAt").ascending());
+        
+        Pageable pageable = PageRequest.of(page, size, sort);
         Page<ShowEventInfoDto> eventPage = eventService.searchEvents(search, pageable);
 
         model.addAttribute("events", eventPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", eventPage.getTotalPages());
         model.addAttribute("search", search);
-
+    
         return "events/all";
     }
 

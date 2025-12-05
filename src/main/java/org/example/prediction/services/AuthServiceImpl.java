@@ -4,7 +4,6 @@ import org.example.prediction.models.entities.User;
 import org.example.prediction.dto.form.UserRegistrationDto;
 import org.example.prediction.models.enums.UserRole;
 import org.example.prediction.repositories.UserRepository;
-import org.modelmapper.ModelMapper;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
-    private final ModelMapper mapper;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional

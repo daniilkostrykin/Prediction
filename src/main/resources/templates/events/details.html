@@ -18,12 +18,13 @@
             <span th:text="${errorMessage}"></span>
         </article>
 
-        <div th:if="${!hasVoted and currentUser != null and currentUser.role.name() != 'ADMIN'}">
+        <div th:if="${!hasVoted and currentUser != null and currentUser.role.name() != 'ADMIN'}"
+        style="display: flex; justify-content: center;">
         <form method="post" th:action="@{/predictions/make}">
             
             <input type="hidden" name="eventId" th:value="${event.id}">
             
-            <h3>Сделайте ваш выбор:</h3>
+            <h3 style="text-align: center;">Сделайте ваш выбор:</h3>
 
             <div th:each="opt : ${event.optionsWithStats}" style="margin-bottom: 5px;">
                 <label>
@@ -31,7 +32,7 @@
                     <span th:text="${opt.text}">Текст варианта</span>
                 </label>
             </div>
-            <button type="submit" style="margin-top: 15px;">Подтвердить выбор</button>
+            <button type="submit" style="margin-top: 40px; width: auto; padding: 15px 39px; font-size: 1rem;">Подтвердить выбор</button>
         </form>
         </div>
         <hr>
@@ -64,7 +65,7 @@
                                     th:text="${opt.text}"></option>
                         </select>
                     </label>
-                    <button type="submit" style="background-color: #4caf50; border: none;">Подтвердить результат</button>
+                    <button type="submit" style="background-color: #4caf50 !important; border: none;">Подтвердить результат</button>
                 </form>
             </div>
         </div>
@@ -75,8 +76,8 @@
             <h3> Событие завершено</h3>
     
         </div>
-            <div style="margin-top: 10px;">
-            <a href="/events/all" role="button" class="secondary">Назад к списку</a>
+            <div style="margin-top: 50px;">
+            <a href="/events/all" role="button" class="secondary" style="font-size: 0.9rem; padding: 5px 15px;">Назад к списку</a>
         </div>
     </article>
 </main>

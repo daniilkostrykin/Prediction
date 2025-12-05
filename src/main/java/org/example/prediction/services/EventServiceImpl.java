@@ -23,7 +23,10 @@ import org.example.prediction.repositories.PredictionRepository;
 import org.example.prediction.repositories.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,7 +68,7 @@ public class EventServiceImpl implements EventService {
     public void createEvent(AddEventDto form) {
 
         Event event = mapper.map(form, Event.class);
-        event.setStatus(EventStatus.PENDING);
+        event.setStatus(EventStatus.ACTIVE);
         //event.setClosesAt(Instant.now().plusSeconds(86400));
 
         java.time.ZoneId zoneId = java.time.ZoneId.systemDefault();
@@ -231,4 +234,22 @@ public class EventServiceImpl implements EventService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден: " + username));
     }
+
+    @Scheduled(fixedRate = 60000) 
+        @CacheEvict(value = "events", allEntries = true)
+        @Transactional
+        public void closeExpiredEvents() {
+            log.debug("Запуск проверки истекших событий...");
+            
+            List<Event> expiredEvents = eventRepository.findAllByStatusAndClosesAtBefore(EventStatus.ACTIVE, Instant.now());
+            
+            if (!expiredEvents.isEmpty()) {
+                for (Event event : expiredEvents) {
+                    log.info("Событие id={} истекло. Закрываем прием ставок.", event.getId());
+                    event.setStatus(EventStatus.CLOSED); 
+                }
+                eventRepository.saveAll(expiredEvents);
+            
+            }
+        }
 }
