@@ -1,4 +1,5 @@
 package org.example.prediction.web;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import org.example.prediction.dto.admin.AdminDashboardViewModel;
 import org.example.prediction.models.entities.Event;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
     private final AdminService adminService;
@@ -22,6 +24,7 @@ public class AdminController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public String adminDashboard(Model model) {
         // Получаем всех пользователей
         List<User> allUsers = adminService.getAllUsers();

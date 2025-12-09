@@ -45,10 +45,6 @@ public class PredictionServiceImpl implements PredictionService {
             throw new IllegalStateException("Время для предсказаний истекло");
         }
 
-        if (predictionRepository.existsByUserAndEvent(user, event)) {
-            throw new IllegalStateException("Вы уже сделали предсказание на это событие");
-        }
-
         EventOption option = eventOptionRepository.findById(form.getChosenOptionId())
                 .orElseThrow(() -> new IllegalArgumentException("Опция не найдена"));
 

@@ -11,6 +11,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddEventDto implements java.io.Serializable {
     @NotBlank(message = "Название события не может быть пустым")
     @Size(min = 5, max = 100, message = "Название должно быть от 5 до 100 символов")
@@ -27,40 +34,4 @@ public class AddEventDto implements java.io.Serializable {
     @Future(message = "Дата и время окончания должны быть в будущем")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime closesAt;
-
-    public AddEventDto() {}
-
-    public AddEventDto(String title, String description, List<String> options, LocalDateTime closesAt) {
-        this.title = title;
-        this.description = description;
-        this.options = options;
-        this.closesAt = closesAt;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public List<String> getOptions() {
-        return options;
-    }
-
-    public void setOptions(List<String> options) {
-        this.options = options;
-    }
-
-    public LocalDateTime getClosesAt() { return closesAt; }
-    public void setClosesAt(LocalDateTime closesAt) { this.closesAt = closesAt; }
 }

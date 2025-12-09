@@ -1,50 +1,15 @@
 package org.example.prediction.dto;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserStatsDto implements java.io.Serializable {
     private String username;
     private int successfulPredictions;
     private long totalPredictionsCount;
     private double successRate;
-
-    public UserStatsDto() {
-    }
-
-    public UserStatsDto(String username, int successfulPredictions, long totalPredictionsCount, double successRate) {
-        this.username = username;
-        this.successfulPredictions = successfulPredictions;
-        this.totalPredictionsCount = totalPredictionsCount;
-        this.successRate = successRate;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public int getSuccessfulPredictions() {
-        return successfulPredictions;
-    }
-
-    public void setSuccessfulPredictions(int successfulPredictions) {
-        this.successfulPredictions = successfulPredictions;
-    }
-
-    public long getTotalPredictionsCount() {
-        return totalPredictionsCount;
-    }
-
-    public void setTotalPredictionsCount(long totalPredictionsCount) {
-        this.totalPredictionsCount = totalPredictionsCount;
-    }
-
-    public double getSuccessRate() {
-        return successRate;
-    }
-
-    public void setSuccessRate(double successRate) {
-        this.successRate = successRate;
-    }
 }

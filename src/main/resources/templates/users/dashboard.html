@@ -3,24 +3,48 @@
 <head th:replace="~{fragments/head :: head}"></head>
 <body>
 <main class="container">
-    <table role="grid" th:if="${!userStats.empty}">
+    <form action="/dashboard" method="get" role="search"  style="margin-bottom: 20px;">
+        <div role="group" style="display: flex; gap: 10px;">
+
+        <input type="search" name="search" th:value="${searchQuery}" placeholder="Найти игрока...">
+            <button type="submit" style="width: auto; padding: 5px 15px; font-size: 0.8rem;">Искать</button></div>
+    </form>
+    <table role="grid" th:if="${!userStats.empty}" class="centered-table">
         <thead>
-        <tr>
+        <tr >
             <th>Имя</th>
             <th>Победы</th>
             <th>Всего предсказаний</th>
-            <th>Процент побед</th>
+            <th style="text-align: center;">Процент побед</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="user : ${userStats}">
+        <tr th:each="user : ${userStats.content}" style="text-align: center !important;">
             <td th:text="${user.username}"></td>
             <td th:text="${user.wonPredictions}"></td>
             <td th:text="${user.totalPredictions}"></td>
-            <td th:text="${numbers.formatDecimal(user.winRate, 1, 0)}"></td>
+            <td th:text="${#numbers.formatDecimal(user.winRate, 1, 0)}"></td>
         </tr>
         </tbody>
     </table>
+    <div class="grid" style="margin-top:20px;">
+        <div>
+            <a role="button" class="secondary"
+               th:if="${userStats.number > 0}"
+               th:href="@{/dashboard(page=${userStats.number - 1}, search=${searchQuery})}">Назад</a>
+        </div>
+        <div style="text-align: center;">
+            Страница <span th:text="${userStats.number + 1}">1</span>
+            из <span th:text="${userStats.totalPages}">10</span>
+        </div>
+        <div style="text-align: right;">
+            <a role="button" class="secondary"
+               th:if="${userStats.number < userStats.totalPages - 1}"
+               th:href="@{/dashboard(page=${userStats.number + 1}, search=${searchQuery})}">
+                Вперед
+            </a>
+        </div>
+    </div>
 </main>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>

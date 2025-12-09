@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.example.prediction.config.RedisConfig;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(classes = {PredictionApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@ImportAutoConfiguration(exclude = {RedisConfig.class})
 class AdminScenarioTest {
 
     @Autowired
@@ -34,6 +37,15 @@ class AdminScenarioTest {
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
     void testAdminCanAccessDashboard() throws Exception {
+        // Настройка мока для возвращения статистики
+        org.example.prediction.dto.admin.AdminDashboardViewModel stats =
+            new org.example.prediction.dto.admin.AdminDashboardViewModel(10, 5, 20);
+        Mockito.when(adminService.getDashboardStats()).thenReturn(stats);
+        
+        // Настройка моков для других методов, используемых в контроллере
+        Mockito.when(adminService.getAllUsers()).thenReturn(java.util.Collections.emptyList());
+        Mockito.when(adminService.getPendingEvents()).thenReturn(java.util.Collections.emptyList());
+        
         // Админ должен иметь доступ к /admin
         mockMvc.perform(get("/admin"))
                 .andExpect(status().isOk())
@@ -94,5 +106,21 @@ class AdminScenarioTest {
                         .param("title", "Hacked Event")
                         .with(csrf()))
                 .andExpect(status().isForbidden()); // 403
-    }
-}
+     }
+
+     @Test
+     @WithMockUser(username = "admin", roles = "ADMIN")
+     void testAdminCannotCreateInvalidEvent() throws Exception {
+         // Отправляем пустой title и пустой список опций
+         mockMvc.perform(post("/events/add")
+                         .param("title", "") // Ошибка валидации
+                         .param("description", "Desc")
+                         .param("closesAt", "2020-01-01T12:00") // Прошлое (ошибка @Future)
+                         .with(csrf()))
+                 .andExpect(status().is3xxRedirection()) // Должны редиректиться обратно
+                 .andExpect(redirectedUrl("/events/add")); // Редирект на ту же страницу создания
+         
+         // Проверяем, что метод создания НЕ вызывался
+         Mockito.verify(eventService, Mockito.never()).createEvent(Mockito.any());
+     }
+ }

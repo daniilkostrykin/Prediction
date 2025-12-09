@@ -3,61 +3,17 @@ package org.example.prediction.dto;
 import java.time.Instant;
 import java.util.List;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ShowEventInfoDto implements java.io.Serializable {
     private Long id;
     private String title;
     private String status;
     private Instant closesAt;
     private List<OptionDto> topOptions;
-
-    public ShowEventInfoDto() {
-    }
-
-    public ShowEventInfoDto(Long id, String title, String status, Instant closesAt, List<OptionDto> topOptions) {
-        this.id = id;
-        this.title = title;
-        this.status = status;
-        this.closesAt = closesAt;
-        this.topOptions = topOptions != null ? topOptions : List.of();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Instant getClosesAt() {
-        return closesAt;
-    }
-
-    public void setClosesAt(Instant closesAt) {
-        this.closesAt = closesAt;
-    }
-
-    public List<OptionDto> getTopOptions() {
-        return topOptions;
-    }
-
-    public void setTopOptions(List<OptionDto> topOptions) {
-        this.topOptions = topOptions != null ? topOptions : List.of();
-    }
 }
