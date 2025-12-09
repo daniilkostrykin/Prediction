@@ -22,16 +22,16 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     public void register(UserRegistrationDto form){
-        log.debug("Регистрация пользователя: {}", form.username());
+        log.debug("Регистрация пользователя: {}", form.getUsername());
 
-        if (userRepository.findByUsername(form.username()).isPresent()) {
-            log.warn("Попытка регистрации пользователя с уже существующим именем: {}", form.username());
+        if (userRepository.findByUsername(form.getUsername()).isPresent()) {
+            log.warn("Попытка регистрации пользователя с уже существующим именем: {}", form.getUsername());
             throw new RuntimeException("Username уже занят");
         }
         User user = new User();
-        user.setUsername(form.username());
-        user.setEmail(form.email());
-        user.setPassword(passwordEncoder.encode(form.password()));
+        user.setUsername(form.getUsername());
+        user.setEmail(form.getEmail());
+        user.setPassword(passwordEncoder.encode(form.getPassword()));
         user.setRole(UserRole.USER);
 
         userRepository.save(user);
