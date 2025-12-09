@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+<main class="container">
+    <table role="grid" th:if="${!userStats.empty}">
+        <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Победы</th>
+            <th>Всего предсказаний</th>
+            <th>Процент побед</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${userStats}">
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.wonPredictions}"></td>
+            <td th:text="${user.totalPredictions}"></td>
+            <td th:text="${numbers.formatDecimal(user.winRate, 1, 0)}"></td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

@@ -1,4 +1,4 @@
-/*package org.example.prediction;
+package org.example.prediction;
 
 import org.example.prediction.models.entities.*;
 import org.example.prediction.models.enums.EventStatus;
@@ -18,10 +18,8 @@ import org.modelmapper.ModelMapper;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hibernate.validator.internal.util.Contracts.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 class LogicTest {
 
@@ -83,6 +81,7 @@ class LogicTest {
 
         // Проверяем, что всё сохранилось в БД
         verify(eventRepository).saveAndFlush(event);
+        verify(eventOptionRepository).saveAndFlush(winningOption);
         verify(userRepository).save(user);
     }
-}*/
+}
