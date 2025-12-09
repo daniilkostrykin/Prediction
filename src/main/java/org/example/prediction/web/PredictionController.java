@@ -1,5 +1,6 @@
 package org.example.prediction.web;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.prediction.models.entities.User;
@@ -26,7 +27,7 @@ public class PredictionController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/make")
-    public String makePrediction(
+    public String makePrediction(@Valid
             @ModelAttribute AddPredictionDto form,
             Principal principal,
             RedirectAttributes redirectAttributes
@@ -41,7 +42,7 @@ public class PredictionController {
             redirectAttributes.addFlashAttribute("successMessage", "Предсказание успешно сделано!");
 
         } catch (Exception e) {
-            log.error("Ошибка при прдесказании", e);
+            log.error("Ошибка при предсказании", e);
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
 

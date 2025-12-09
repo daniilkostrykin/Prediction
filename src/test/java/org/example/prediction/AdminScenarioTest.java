@@ -16,6 +16,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -91,12 +92,14 @@ class AdminScenarioTest {
     @WithMockUser(username = "admin", roles = "ADMIN")
     void testAdminCanDeleteEvent() throws Exception {
         // Эмулируем удаление
-        mockMvc.perform(get("/events/delete/1"))
+        mockMvc.perform(delete("/events/delete/1")
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/events/all"));
 
         Mockito.verify(eventService).deleteEvent(1L);
     }
+
 
     @Test
     @WithMockUser(username = "hacker", roles = "USER") // Пробуем под юзером

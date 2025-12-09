@@ -46,8 +46,9 @@
             <h4>Панель управления событием</h4>
             
             <div style="margin-bottom: 10px;">
-                <form th:action="@{/events/delete/{id} (id=${event.id})}" th:method="GET"
+                <form th:action="@{/events/delete/{id} (id=${event.id})}" th:method="POST"
                       onsubmit="return confirm('Вы уверены, что хотите удалить это событие?')">
+                    <input type="hidden" name="_method" value="DELETE">
                     <button type="submit" class="outline" style="background-color: #B22222;">Удалить событие</button>
                 </form>
             </div>
