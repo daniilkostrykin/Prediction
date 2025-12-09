@@ -130,7 +130,7 @@ public class EventServiceImpl implements EventService {
         );
     }*/
     @Override
-    @Cacheable(value = "event", key = "#id")
+    @Cacheable(value = "event", key = "#id", unless = "#result == null")
     public ShowDetailedEventInfoDto findEventById(Long id) {
         Event event = eventRepository.findByIdWithOptions(id)
                 .orElseThrow(() -> new EventNotFoundException("Событие с ID " + id + " не найдено"));

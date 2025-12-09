@@ -117,13 +117,12 @@ public class EventController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("delete/{id}")
+    @DeleteMapping("delete/{id}")
     public String deleteEvent(@PathVariable("id") Long id, RedirectAttributes redirectAttributes){
         log.debug("Удаление события: {}", id);
         eventService.deleteEvent(id);
         redirectAttributes.addFlashAttribute("successMessage", "Событие успешно удалено");
         return "redirect:/events/all";
-
     }
 
     @PreAuthorize("hasRole('ADMIN')")
