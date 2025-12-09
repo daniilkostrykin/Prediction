@@ -43,10 +43,18 @@ public class EventController {
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<ShowEventInfoDto> eventPage = eventService.searchEvents(search, pageable);
 
-        model.addAttribute("events", eventPage.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", eventPage.getTotalPages());
-        model.addAttribute("search", search);
+        // Add null check to prevent NullPointerException
+        if (eventPage == null) {
+            model.addAttribute("events", java.util.Collections.emptyList());
+            model.addAttribute("currentPage", 0);
+            model.addAttribute("totalPages", 0);
+            model.addAttribute("search", search);
+        } else {
+            model.addAttribute("events", eventPage.getContent());
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", eventPage.getTotalPages());
+            model.addAttribute("search", search);
+        }
     
         return "events/all";
     }

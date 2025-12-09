@@ -84,4 +84,39 @@ class LogicTest {
         verify(eventOptionRepository).saveAndFlush(winningOption);
         verify(userRepository).save(user);
     }
+
+    @Test
+    void testFinishEvent_ThrowsException_WhenEventNotFound() {
+        // Настройка мока: событие не найдено
+        when(eventRepository.findById(999L)).thenReturn(java.util.Optional.empty());
+        
+        // Проверяем, что метод выбрасывает исключение
+        org.junit.jupiter.api.Assertions.assertThrows(org.example.prediction.models.exceptions.EventNotFoundException.class, () ->
+            eventService.finishEvent(999L, 1L)
+        );
+    }
+
+    @Test
+    void testFinishEvent_ThrowsException_WhenOptionNotBelongsToEvent() {
+        // Подготовка данных
+        Long eventId = 100L;
+        Long wrongOptionId = 999L;
+
+        Event event = new Event();
+        event.setId(eventId);
+        event.setStatus(EventStatus.ACTIVE);
+
+        EventOption wrongOption = new EventOption();
+        wrongOption.setId(wrongOptionId);
+        // У этой опции другое событие, не то, которое мы передаем
+
+        // Настройка моков
+        when(eventRepository.findById(eventId)).thenReturn(java.util.Optional.of(event));
+        when(eventOptionRepository.findById(wrongOptionId)).thenReturn(java.util.Optional.of(wrongOption));
+
+        // Проверяем, что метод выбрасывает исключение из-за несоответствия события и опции
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () ->
+            eventService.finishEvent(eventId, wrongOptionId)
+        );
+    }
 }

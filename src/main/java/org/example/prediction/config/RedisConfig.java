@@ -1,6 +1,7 @@
 package org.example.prediction.config;
- 
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Primary;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -21,17 +22,18 @@ import java.time.Duration;
 
 @Configuration
 @EnableCaching
+@ConditionalOnProperty(name = "spring.cache.type", havingValue = "redis", matchIfMissing = false)
 public class RedisConfig {
 
-    @Value("${spring.data.redis.host}")
+    @Value("${spring.data.redis.host:localhost}")
     private String redisHost;
 
-    @Value("${spring.data.redis.port}")
+    @Value("${spring.data.redis.port:6379}")
     private int redisPort;
 
     @Bean
     public LettuceConnectionFactory redisConnectionFactory() {
-        RedisStandaloneConfiguration configuration = 
+        RedisStandaloneConfiguration configuration =
             new RedisStandaloneConfiguration(redisHost, redisPort);
         return new LettuceConnectionFactory(configuration);
     }
@@ -49,7 +51,7 @@ public class RedisConfig {
             BasicPolymorphicTypeValidator.builder()
                 .allowIfBaseType(Object.class)
                 .build();
-        objectMapper.activateDefaultTyping(typeValidator, 
+        objectMapper.activateDefaultTyping(typeValidator,
                                           ObjectMapper.DefaultTyping.NON_FINAL);
 
         return objectMapper;
@@ -58,7 +60,7 @@ public class RedisConfig {
     @Bean
     public RedisCacheConfiguration defaultCacheConfig(ObjectMapper redisObjectMapper) {
         StringRedisSerializer keySerializer = new StringRedisSerializer();
-        GenericJackson2JsonRedisSerializer valueSerializer = 
+        GenericJackson2JsonRedisSerializer valueSerializer =
             new GenericJackson2JsonRedisSerializer(redisObjectMapper);
 
         return RedisCacheConfiguration.defaultCacheConfig()

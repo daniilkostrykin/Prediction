@@ -11,3 +11,8 @@ footer {
     padding: 10px 0 !important;
     text-align: center; 
 }
+.centered-table th,
+.centered-table td {
+    text-align: center;
+    vertical-align: middle; /* если хочешь выравнивание по вертикали */
+}

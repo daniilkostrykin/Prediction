@@ -137,6 +137,7 @@ public class EventServiceImpl implements EventService {
         return mapper.map(event, ShowDetailedEventInfoDto.class);
     }
 
+    @Override
     public Page<ShowEventInfoDto> searchEvents(String query, Pageable pageable) {
         Page<Event> page;
         if (query != null && !query.isEmpty()) {
@@ -164,8 +165,8 @@ public class EventServiceImpl implements EventService {
         );
     }*/
 
-    private ShowEventInfoDto mapToListItem(Event event) {
-        return mapper.map(event, ShowEventInfoDto.class);
+    private org.example.prediction.dto.ShowEventInfoDto mapToListItem(Event event) {
+        return mapper.map(event, org.example.prediction.dto.ShowEventInfoDto.class);
     }
 
     public Event findEventWithStats(Long id) {
@@ -202,7 +203,7 @@ public class EventServiceImpl implements EventService {
         EventOption winningOption = eventOptionRepository.findById(winningOptionId)
                 .orElseThrow(() -> new IllegalArgumentException("Опция не найдена"));
 
-        if (!winningOption.getEvent().getId().equals(event.getId())) {
+        if (winningOption.getEvent() == null || !winningOption.getEvent().getId().equals(event.getId())) {
             throw new IllegalArgumentException("Опция не принадлежит этому событию");
         }
 
