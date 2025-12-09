@@ -1,4 +1,4 @@
-/*package org.example.prediction;
+package org.example.prediction;
 
 import org.example.prediction.dto.form.AddPredictionDto;
 import org.example.prediction.models.entities.User;
@@ -76,4 +76,4 @@ class UserScenarioTest {
         mockMvc.perform(get("/admin"))
                 .andExpect(status().isForbidden()); // Ожидаем ошибку 403 (Доступ запрещен)
     }
-}*/
+}
