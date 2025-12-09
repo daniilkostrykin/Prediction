@@ -235,7 +235,7 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден: " + username));
     }
 
-    @Scheduled(fixedRate = 60000) 
+    //@Scheduled(fixedRate = 60000)
         @CacheEvict(value = "events", allEntries = true)
         @Transactional
         public void closeExpiredEvents() {

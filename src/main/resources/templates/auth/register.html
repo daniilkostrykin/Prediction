@@ -1,30 +1,65 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head}"></head>
+<body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<body>
-    <main class="container">
-        <h2>Регистрация</h2>
+<main class="container">
+    <article style="max-width: 600px; margin: 0 auto;">
+        <hgroup>
+            <h1>Регистрация</h1>
+            <p>Создайте новую учетную запись</p>
+        </hgroup>
 
         <form method="POST" th:action="@{/register}" th:object="${userRegistrationDto}">
-            <label>Имя пользователя
-                <input type="text" th:field="*{username}" />
+
+            <label for="username">
+                Логин
+                <input type="text"
+                       id="username"
+                       th:field="*{username}"
+                       placeholder="Придумайте ник"
+                       th:aria-invalid="${#fields.hasErrors('username') ? 'true' : ''}"
+                       required/>
+                <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: red;"></small>
             </label>
 
-            <label>
-                Email
-                <input type="email" th:field="*{email}" />
+            <label for="email">
+                Электронная почта
+                <input type="text"
+                       id="email"
+                       th:field="*{email}"
+                       placeholder="mail@example.com"
+                       th:aria-invalid="${#fields.hasErrors('email') ? 'true' : ''}"
+                       required/>
+                <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red;"></small>
             </label>
 
-            <label>Пароль
-                <input type="password" th:field="*{password}" />
+            <label for="password">
+                Пароль
+                <input type="password"
+                       id="password"
+                       th:field="*{password}"
+                       placeholder="Минимум 6 символов"
+                       th:aria-invalid="${#fields.hasErrors('password') ? 'true' : ''}"
+                       required/>
+                <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red;"></small>
             </label>
 
-            <button type="submit">Зарегистрироваться</button>
+            <label for="confirmPassword">
+                Повторите пароль
+                <input type="password"
+                       id="confirmPassword"
+                       th:field="*{confirmPassword}"
+                       placeholder="Повторите пароль"/>
+            </label>
+
+            <button type="submit" class="contrast">Зарегистрироваться</button>
 
         </form>
-    </main>
+    </article>
+</main>
+
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>
