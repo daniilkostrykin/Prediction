@@ -258,3 +258,9 @@ INSERT INTO prediction_schema.event_options (event_id, text, is_correct_outcome)
 -- 30. Apple Surprise (FINISHED)
 INSERT INTO prediction_schema.event_options (event_id, text, is_correct_outcome) VALUES
 (30, 'Да, был анонс', FALSE), (30, 'Нет, тишина', TRUE);
+
+-- ПРИЗЫ
+INSERT INTO prediction_schema.prizes (title, ticket_price, draw_date, status) VALUES
+('Футболка Prediction App', 1, '2026-01-01 12:00:00', 'OPEN'),
+('iPhone 15 Pro', 50, '2026-03-01 12:00:00', 'OPEN'),
+('VIP Статус', 10, '2025-12-31 23:59:00', 'OPEN');

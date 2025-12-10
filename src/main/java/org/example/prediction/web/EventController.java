@@ -43,7 +43,6 @@ public class EventController {
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<ShowEventInfoDto> eventPage = eventService.searchEvents(search, pageable);
 
-        // Add null check to prevent NullPointerException
         if (eventPage == null) {
             model.addAttribute("events", java.util.Collections.emptyList());
             model.addAttribute("currentPage", 0);
@@ -67,11 +66,8 @@ public class EventController {
           
           if (principal != null) {
               String username = principal.getName();
-              //Event eventEntity = eventService.findEventWithStats(id);
-              //hasVoted = predictionRepository.existsByUserUsernameAndEvent(username, eventEntity);
               hasVoted = predictionRepository.existsByUserUsernameAndEventId(username, id);
 
-              // Получаем информацию о текущем пользователе для проверки прав администратора
               org.example.prediction.models.entities.User currentUser = eventService.getCurrentUserByUsername(username);
               model.addAttribute("currentUser", currentUser);
           }

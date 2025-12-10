@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container">
+
+    <div th:if="${successMessage}">
+        <mark th:text="${successMessage}"></mark>
+    </div>
+    <div th:if="${errorMessage}">
+        <mark th:text="${errorMessage}"></mark>
+    </div>
+
+    <hgroup>
+        <h1>Розыгрыши призов</h1>
+        <p th:if="${currentUser != null}">
+            Ваш баланс: <strong th:text="${currentUser.successfulPredictions}">0</strong> побед
+        </p>
+    </hgroup>
+
+    <form action="/prizes" method="get" role="search">
+        <fieldset role="group">
+            <input type="search" name="search" th:value="${searchQuery}" placeholder="Найти приз...">
+            <button type="submit">Искать</button>
+        </fieldset>
+    </form>
+
+    <article sec:authorize="hasRole('ADMIN')">
+        <header><strong>Создать новый розыгрыш</strong></header>
+        <form method="post" th:action="@{/prizes/add}" th:object="${addPrizeForm}">
+            <div class="grid">
+                <label>Название
+                    <input type="text" th:field="*{title}" placeholder="Например: iPhone 16" required>
+                </label>
+                <label>Цена (побед)
+                    <input type="number" th:field="*{ticketPrice}" min="1" required>
+                </label>
+                <label>Дата итога
+                    <input type="datetime-local" th:field="*{drawDate}" required>
+                </label>
+            </div>
+            <button type="submit">Запустить</button>
+        </form>
+    </article>
+
+    <hr>
+
+    <div class="grid">
+        <article th:each="prize : ${prizes}">
+
+            <header>
+                <strong th:text="${prize.title}">Название</strong>
+                <br>
+                <small th:if="${prize.status.name() == 'OPEN'}">🟢 Открыт</small>
+                <small th:if="${prize.status.name() == 'CLOSED'}">🔴 Завершен</small>
+            </header>
+
+            <p>Цена: <span th:text="${prize.ticketPrice}">10</span> побед</p>
+            <p>Дата: <span th:text="${#dates.format(prize.drawDate, 'dd-MM HH:mm')}"></span></p>
+
+            <div th:if="${prize.status.name() == 'CLOSED'}">
+                <hr>
+                <strong>Победитель: </strong>
+                <span th:if="${prize.winner != null}" th:text="${prize.winner.username}">User</span>
+                <span th:if="${prize.winner == null}">Нет участников</span>
+            </div>
+
+            <footer th:if="${prize.status.name() == 'OPEN'}">
+
+                <form method="post" th:action="@{/prizes/buy/{id}(id=${prize.id})}" th:if="${currentUser != null}">
+                    <button type="submit"
+                            th:if="${currentUser.successfulPredictions >= prize.ticketPrice}">
+                        Купить билет
+                    </button>
+
+                    <button disabled
+                            th:if="${currentUser.successfulPredictions < prize.ticketPrice}"
+                            class="secondary">
+                        Не хватает побед
+                    </button>
+                </form>
+
+                <form sec:authorize="hasRole('ADMIN')"
+                      th:action="@{/prizes/draw/{id}(id=${prize.id})}" method="post">
+                    <button type="submit" class="outline contrast">Разыграть</button>
+                </form>
+            </footer>
+        </article>
+    </div>
+
+    <div th:if="${prizes.empty}">
+        <p>Пока нет активных розыгрышей.</p>
+    </div>
+
+    <div class="grid" th:if="${totalPages > 1}">
+        <a role="button" class="outline secondary"
+           th:if="${currentPage > 0}"
+           th:href="@{/prizes(page=${currentPage - 1}, search=${searchQuery})}">
+            ← Назад
+        </a>
+
+        <div style="text-align: center; align-self: center;">
+            <small th:text="${currentPage + 1} + ' / ' + ${totalPages}"></small>
+        </div>
+
+        <a role="button" class="outline secondary"
+           th:if="${currentPage < totalPages - 1}"
+           th:href="@{/prizes(page=${currentPage + 1}, search=${searchQuery})}">
+            Вперед →
+        </a>
+    </div>
+
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

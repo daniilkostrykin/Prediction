@@ -47,7 +47,6 @@ public class AdminService {
                 .filter(event -> event.getStatus() == EventStatus.ACTIVE)
                 .count());
         
-        // Подсчет прогнозов за сегодня
         LocalDate today = LocalDate.now();
         Instant startOfDay = today.atStartOfDay(ZoneId.systemDefault()).toInstant();
         Instant endOfDay = startOfDay.plusSeconds(86400 - 1); // до конца дня

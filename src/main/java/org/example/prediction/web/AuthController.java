@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-//import jakarta.servlet.http.HttpSession;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -55,25 +54,4 @@ public class AuthController {
 
     }
 
-    /*@PostMapping("/login")
-    public String processLogin(@ModelAttribute LoginDto form, HttpSession session, Model model) {
-        Optional<User> userOpt = userRepository.findByUsername(form.getUsername());
-
-        if (userOpt.isPresent() && userOpt.get().getPassword().equals(form.getPassword())) {
-            
-            session.setAttribute("currentUser", userOpt.get());
-            
-            return "redirect:/";
-        } else {
-            model.addAttribute("error", "Неверный логин или пароль");
-            model.addAttribute("loginForm", form);
-            return "auth/login";
-        }
-    }
-    
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/login";
-    }*/
 }
