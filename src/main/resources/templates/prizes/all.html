@@ -6,15 +6,13 @@
 
 <main class="container">
 
-    <!-- Блок сообщений (используем стандартные уведомления Pico/HTML) -->
     <div th:if="${successMessage}">
         <mark th:text="${successMessage}"></mark>
     </div>
     <div th:if="${errorMessage}">
-        <mark th:text="${errorMessage}"></mark> <!-- Pico отображает mark как выделенный текст -->
+        <mark th:text="${errorMessage}"></mark>
     </div>
 
-    <!-- Заголовок и Баланс -->
     <hgroup>
         <h1>Розыгрыши призов</h1>
         <p th:if="${currentUser != null}">
@@ -22,7 +20,6 @@
         </p>
     </hgroup>
 
-    <!-- ПОИСК -->
     <form action="/prizes" method="get" role="search">
         <fieldset role="group">
             <input type="search" name="search" th:value="${searchQuery}" placeholder="Найти приз...">
@@ -30,7 +27,6 @@
         </fieldset>
     </form>
 
-    <!-- ФОРМА АДМИНА (видна только админу) -->
     <article sec:authorize="hasRole('ADMIN')">
         <header><strong>Создать новый розыгрыш</strong></header>
         <form method="post" th:action="@{/prizes/add}" th:object="${addPrizeForm}">
@@ -51,9 +47,7 @@
 
     <hr>
 
-    <!-- СПИСОК ПРИЗОВ -->
     <div class="grid">
-        <!-- Карточка приза -->
         <article th:each="prize : ${prizes}">
 
             <header>
@@ -66,7 +60,6 @@
             <p>Цена: <span th:text="${prize.ticketPrice}">10</span> побед</p>
             <p>Дата: <span th:text="${#dates.format(prize.drawDate, 'dd-MM HH:mm')}"></span></p>
 
-            <!-- Если завершен -->
             <div th:if="${prize.status.name() == 'CLOSED'}">
                 <hr>
                 <strong>Победитель: </strong>
@@ -74,18 +67,14 @@
                 <span th:if="${prize.winner == null}">Нет участников</span>
             </div>
 
-            <!-- Подвал карточки (Кнопки) -->
             <footer th:if="${prize.status.name() == 'OPEN'}">
 
-                <!-- Кнопки Юзера -->
                 <form method="post" th:action="@{/prizes/buy/{id}(id=${prize.id})}" th:if="${currentUser != null}">
-                    <!-- Кнопка Активная (хватает денег) -->
                     <button type="submit"
                             th:if="${currentUser.successfulPredictions >= prize.ticketPrice}">
                         Купить билет
                     </button>
 
-                    <!-- Кнопка Неактивная (мало денег) -->
                     <button disabled
                             th:if="${currentUser.successfulPredictions < prize.ticketPrice}"
                             class="secondary">
@@ -93,7 +82,6 @@
                     </button>
                 </form>
 
-                <!-- Кнопка Админа -->
                 <form sec:authorize="hasRole('ADMIN')"
                       th:action="@{/prizes/draw/{id}(id=${prize.id})}" method="post">
                     <button type="submit" class="outline contrast">Разыграть</button>
@@ -102,12 +90,10 @@
         </article>
     </div>
 
-    <!-- Пустой список -->
     <div th:if="${prizes.empty}">
         <p>Пока нет активных розыгрышей.</p>
     </div>
 
-    <!-- ПАГИНАЦИЯ (Только если страниц > 1) -->
     <div class="grid" th:if="${totalPages > 1}">
         <a role="button" class="outline secondary"
            th:if="${currentPage > 0}"

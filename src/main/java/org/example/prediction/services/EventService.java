@@ -21,24 +21,3 @@ public interface EventService {
     Event findEventWithStats(Long id);
 
 }
-
-/* 
-public interface CompanyService {
-
-    void addCompany(AddCompanyDto companyDTO);
-
-    List<ShowCompanyInfoDto> allCompanies();
-
-    Page<ShowCompanyInfoDto> allCompaniesPaginated(Pageable pageable);
-
-    List<ShowCompanyInfoDto> searchCompanies(String searchTerm);
-
-    List<ShowCompanyInfoDto> findByTown(String town);
-
-    List<ShowCompanyInfoDto> findByBudgetGreaterThan(Double minBudget);
-
-    ShowDetailedCompanyInfoDto companyDetails(String companyName);
-
-    void removeCompany(String companyName);
-}
-*/

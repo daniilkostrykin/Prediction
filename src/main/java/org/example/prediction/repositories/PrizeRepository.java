@@ -1,7 +1,6 @@
 package org.example.prediction.repositories;
 
 import org.example.prediction.models.entities.Prize;
-import org.example.prediction.models.enums.PrizeStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

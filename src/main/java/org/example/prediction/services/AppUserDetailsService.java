@@ -29,8 +29,6 @@ public class AppUserDetailsService implements UserDetailsService {
                 });
 
         log.debug("Пользователь найден: {}, роль: {}", user.getUsername(), user.getRole());
-        // В твоем UserRole просто Enum, нужно превратить его в GrantedAuthority
-        // Spring Security ожидает префикс "ROLE_"
         List<SimpleGrantedAuthority> authorities = Collections.singletonList(
                 new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
         );
