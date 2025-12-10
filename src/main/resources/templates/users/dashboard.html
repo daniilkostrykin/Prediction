@@ -2,7 +2,13 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head}"></head>
 <body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 <main class="container">
+    <hgroup style="text-align: center; margin-bottom: 30px;">
+        <h1>💰 Рейтинг игроков</h1>
+        <p>У кого сейчас больше всего очков для покупки призов?</p>
+    </hgroup>
+
     <form action="/dashboard" method="get" role="search"  style="margin-bottom: 20px;">
         <div role="group" style="display: flex; gap: 10px;">
 
@@ -13,7 +19,7 @@
         <thead>
         <tr >
             <th>Имя</th>
-            <th>Победы</th>
+            <th>Баланс</th>
             <th>Всего предсказаний</th>
             <th style="text-align: center;">Процент побед</th>
         </tr>
@@ -23,7 +29,7 @@
             <td th:text="${user.username}"></td>
             <td th:text="${user.wonPredictions}"></td>
             <td th:text="${user.totalPredictions}"></td>
-            <td th:text="${#numbers.formatDecimal(user.winRate, 1, 0)}"></td>
+            <td th:text="${#numbers.formatDecimal(user.winRate, 1, 0)} + '%'"></td>
         </tr>
         </tbody>
     </table>

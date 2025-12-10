@@ -1,12 +1,33 @@
 <nav th:fragment="navbar" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
      xmlns:th="http://www.w3.org/1999/xhtml" class="container">
+
     <ul>
         <li><a href="/"><strong>Prediction App</strong></a></li>
-        <li><a href="/events/all" th:attrappend="class=${#httpServletRequest != null and #httpServletRequest.getRequestURI() != null and #httpServletRequest.getRequestURI().startsWith('/events/all') ? ' contrast' : ''}">События</a></li>
+
+        <li>
+            <a href="/events/all">
+                События
+            </a>
+        </li>
+
+        <li>
+            <a href="/dashboard">
+                Рейтинг
+            </a>
+        </li>
+
+        <li>
+            <a href="/prizes">
+                Розыгрыши
+            </a>
+        </li>
+
         <li sec:authorize="hasRole('ADMIN')">
-            <a href="/events/add">Новое событие</a></li>
+            <a href="/events/add">Новое событие</a>
+        </li>
         <li sec:authorize="hasRole('ADMIN')">
-            <a href="/admin">Админ панель</a></li>
+            <a href="/admin">Админ панель</a>
+        </li>
     </ul>
 
     <ul>

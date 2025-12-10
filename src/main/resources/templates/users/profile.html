@@ -50,9 +50,9 @@
             </td>
             <td th:text="${prediction.chosenOption.text}">Выбор</td>
             <td>
-                <span th:if="${prediction.status.name() == 'PLACED'}" data-tooltip="Ожидание">⏳ В игре</span>
-                <span th:if="${prediction.status.name() == 'WON'}" style="color: green; font-weight: bold;">✅ Победа</span>
-                <span th:if="${prediction.status.name() == 'LOST'}" style="color: red;">❌ Проигрыш</span>
+                <span th:if="${prediction.status.name() == 'PLACED'}" data-tooltip="Ожидание">В игре</span>
+                <span th:if="${prediction.status.name() == 'WON'}" style="color: green; font-weight: bold;">Победа</span>
+                <span th:if="${prediction.status.name() == 'LOST'}" style="color: red;">Проигрыш</span>
             </td>
         </tr>
         </tbody>
