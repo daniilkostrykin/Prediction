@@ -1,27 +1,54 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head :: head}"></head>
-<div th:replace="~{fragments/navbar :: navbar}"></div>
+  <head th:replace="~{fragments/head :: head}"></head>
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<body>
-    <main class="container" style="width: auto;">
-        <h2>Вход</h2>
-        
-        <div th:if="${param.error}" class="alert alert-danger" th:text="${error} ?: 'Неправильный логин или пароль'}"></div>
+  <body>
+    <main class="container" style="width: auto">
+      <h2>Вход</h2>
 
-        <form method="post" th:action="@{/login}" th:object="${loginForm}">
-            <label>Имя пользователя
-                <input type="text" th:field="*{username}" />
-            </label>
+      <div
+        th:if="${error}"
+        style="color: red; margin-bottom: 10px"
+        th:text="${error}"
+      ></div>
 
-            <label>Пароль
-                <input type="password" th:field="*{password}" />
-            </label>
+      <form method="post" th:action="@{/login}" th:object="${loginForm}">
+        <label for="username">
+          Имя пользователя
+          <input
+            type="text"
+            id="username"
+            th:field="*{username}"
+            th:aria-invalid="${#fields.hasErrors('username') ? 'true' : ''}"
+            required
+          />
+          <small
+            th:if="${#fields.hasErrors('username')}"
+            th:errors="*{username}"
+            style="color: red"
+          ></small>
+        </label>
 
-            <button type="submit">Войти</button>
+        <label for="password">
+          Пароль
+          <input
+            type="password"
+            id="password"
+            th:field="*{password}"
+            th:aria-invalid="${#fields.hasErrors('password') ? 'true' : ''}"
+            required
+          />
+          <small
+            th:if="${#fields.hasErrors('password')}"
+            th:errors="*{password}"
+            style="color: red"
+          ></small>
+        </label>
 
-        </form>
+        <button type="submit">Войти</button>
+      </form>
     </main>
-<footer th:replace="~{fragments/footer :: footer}"></footer>
-</body>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+  </body>
 </html>

@@ -1,46 +1,45 @@
-<nav th:fragment="navbar" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-     xmlns:th="http://www.w3.org/1999/xhtml" class="container">
+<nav
+  th:fragment="navbar"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  xmlns:th="http://www.w3.org/1999/xhtml"
+  class="container"
+>
+  <ul>
+    <li>
+      <a href="/"><strong>Prediction App</strong></a>
+    </li>
 
-    <ul>
-        <li><a href="/"><strong>Prediction App</strong></a></li>
+    <li>
+      <a href="/events/all"> События </a>
+    </li>
 
-        <li>
-            <a href="/events/all">
-                События
-            </a>
-        </li>
+    <li>
+      <a href="/dashboard"> Рейтинг </a>
+    </li>
 
-        <li>
-            <a href="/dashboard">
-                Рейтинг
-            </a>
-        </li>
+    <li sec:authorize="isAuthenticated()">
+      <a href="/prizes"> Розыгрыши </a>
+    </li>
 
-        <li>
-            <a href="/prizes">
-                Розыгрыши
-            </a>
-        </li>
+    <li sec:authorize="hasRole('ADMIN')">
+      <a href="/events/add">Новое событие</a>
+    </li>
+    <li sec:authorize="hasRole('ADMIN')">
+      <a href="/admin">Админ панель</a>
+    </li>
+  </ul>
 
-        <li sec:authorize="hasRole('ADMIN')">
-            <a href="/events/add">Новое событие</a>
-        </li>
-        <li sec:authorize="hasRole('ADMIN')">
-            <a href="/admin">Админ панель</a>
-        </li>
-    </ul>
+  <ul>
+    <li sec:authorize="isAnonymous()"><a href="/login">Вход</a></li>
+    <li sec:authorize="isAnonymous()"><a href="/register">Регистрация</a></li>
 
-    <ul>
-        <li sec:authorize="isAnonymous()"><a href="/login">Вход</a></li>
-        <li sec:authorize="isAnonymous()"><a href="/register">Регистрация</a></li>
-
-        <li sec:authorize="isAuthenticated()">
-            <a href="/profile">Профиль</a>
-        </li>
-        <li sec:authorize="isAuthenticated()">
-            <form th:action="@{/logout}" method="post" style="margin: 0;">
-                <button type="submit" class="secondary outline">Выход</button>
-            </form>
-        </li>
-    </ul>
+    <li sec:authorize="isAuthenticated()">
+      <a href="/profile">Профиль</a>
+    </li>
+    <li sec:authorize="isAuthenticated()">
+      <form th:action="@{/logout}" method="post" style="margin: 0">
+        <button type="submit" class="secondary outline">Выход</button>
+      </form>
+    </li>
+  </ul>
 </nav>
