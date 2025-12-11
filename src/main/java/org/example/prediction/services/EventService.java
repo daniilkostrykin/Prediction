@@ -19,5 +19,6 @@ public interface EventService {
     Page<ShowEventInfoDto> searchEvents(String query, Pageable pageable);
     org.example.prediction.models.entities.User getCurrentUserByUsername(String username);
     Event findEventWithStats(Long id);
+    boolean hasUserVoted(String username, Long eventId);
 
 }

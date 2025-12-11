@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Data
 public class AddPrizeDto implements Serializable {
     @NotBlank(message = "Название не может быть пустым")
+    @Size(min = 3, max = 100, message = "Название должно быть от 3 до 100 символов")
     private String title;
 
     @Min(value = 1, message = "Цена должна быть минимум 1 победа")

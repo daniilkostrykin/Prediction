@@ -1,6 +1,6 @@
 package org.example.prediction.repositories;
 
-import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.repository.query.Param;
 import org.example.prediction.models.entities.Event;
 import org.example.prediction.models.enums.EventStatus;
 import org.springframework.data.domain.Page;

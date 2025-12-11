@@ -12,6 +12,7 @@ import org.example.prediction.models.enums.UserRole;
 @Setter
 @NoArgsConstructor
 public class User extends BaseEntity{
+    
 
     @Column(nullable = false, unique = true)
     private String username;

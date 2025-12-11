@@ -23,12 +23,12 @@ public class AddEventDto implements java.io.Serializable {
     @Size(min = 5, max = 100, message = "Название должно быть от 5 до 100 символов")
     private String title;
 
-    @Size(max = 50, message = "Описание должно быть до 500 символов")
+    @Size(max = 500, message = "Описание должно быть до 500 символов")
     private String description;
 
     @NotEmpty(message = "Варианты выбора должны быть")
     @Size(min = 2, message = "Не менее 2-х вариантов выбора")
-    private List<String> options;
+    private List<@NotBlank(message = "Вариант ответа не может быть пустым") String> options;
 
     @NotNull(message = "Укажите дату и время окончания события")
     @Future(message = "Дата и время окончания должны быть в будущем")

@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.example.prediction.dto.ShowEventInfoDto;
 import org.example.prediction.dto.form.AddEventDto;
-import org.example.prediction.repositories.PredictionRepository;
 import org.example.prediction.services.EventService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,12 +28,12 @@ import java.security.Principal;
 public class EventController {
 
     private final EventService eventService;
-    private final PredictionRepository predictionRepository; 
+ 
 
 
     @GetMapping("/all")
     public String showAllEvents(@RequestParam(value = "page", defaultValue = "0") int page,
-                                @RequestParam(value = "size", defaultValue = "2") int size,
+                                @RequestParam(value = "size", defaultValue = "4") int size,
                                 @RequestParam(value = "search", required = false) String search,
                                 @RequestParam(value = "filter", defaultValue = "active") String filter,
                                 Model model) {
@@ -66,7 +65,7 @@ public class EventController {
           
           if (principal != null) {
               String username = principal.getName();
-              hasVoted = predictionRepository.existsByUserUsernameAndEventId(username, id);
+              hasVoted = eventService.hasUserVoted(username, id);
 
               org.example.prediction.models.entities.User currentUser = eventService.getCurrentUserByUsername(username);
               model.addAttribute("currentUser", currentUser);
@@ -82,11 +81,13 @@ public class EventController {
         return new AddEventDto("", "", new java.util.ArrayList<>(java.util.Arrays.asList("", "")), null);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/add")
     public String showCreateForm() {
         return "events/add";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public String createEvent(@Valid @ModelAttribute("createEventForm") AddEventDto form,
                               BindingResult bindingResult,
@@ -132,8 +133,12 @@ public class EventController {
         try {
             eventService.finishEvent(eventId, winningOptionId);
             redirectAttributes.addFlashAttribute("successMessage", "Событие завершено! Результаты пересчитаны.");
+        } catch (org.example.prediction.models.exceptions.EventNotFoundException | IllegalArgumentException e) {
+            log.warn("Ошибка при завершении события {}: {}", eventId, e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Ошибка завершения события: " + e.getMessage());
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Ошибка: " + e.getMessage());
+            log.error("Непредвиденная ошибка при завершении события {}", eventId, e);
+            redirectAttributes.addFlashAttribute("errorMessage", "Произошла непредвиденная системная ошибка.");
         }
 
         return "redirect:/events/details/" + eventId;

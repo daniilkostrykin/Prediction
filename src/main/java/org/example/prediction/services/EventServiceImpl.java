@@ -42,25 +42,6 @@ public class EventServiceImpl implements EventService {
     private final UserRepository userRepository;
     private final ModelMapper mapper;
 
-    /*@Transactional
-    public void createEvent(AddEventDto form) {
-        Event event = new Event();
-        event.setTitle(form.getTitle());
-        event.setDescription(form.getDescription());
-        event.setStatus(EventStatus.PENDING);
-        event.setClosesAt(Instant.now().plusSeconds(86400));
-
-        List<EventOption> options = form.getOptions().stream().map(text -> {
-            EventOption option = new EventOption();
-            option.setText(text);
-            option.setEvent(event);
-            option.setIsCorrectOutcome(false);
-            return option;
-        }).collect(Collectors.toList());
-
-        event.setOptions(options);
-        eventRepository.save(event);
-    }*/
     @Override
     @Transactional
     @CacheEvict(cacheNames = "events", allEntries = true)
@@ -68,13 +49,11 @@ public class EventServiceImpl implements EventService {
 
         Event event = mapper.map(form, Event.class);
         event.setStatus(EventStatus.ACTIVE);
-        //event.setClosesAt(Instant.now().plusSeconds(86400));
 
         java.time.ZoneId zoneId = java.time.ZoneId.systemDefault();
         event.setClosesAt(form.getClosesAt().atZone(zoneId).toInstant());
 
         List<EventOption> options = form.getOptions().stream()
-        .filter(text -> text != null && !text.trim().isEmpty()) 
         .map(text -> {
             EventOption option = new EventOption();
             option.setText(text);
@@ -91,16 +70,6 @@ public class EventServiceImpl implements EventService {
         eventRepository.save(event);
     }
 
-    /*@Transactional
-    public List<ShowEventInfoDto> allEvents() {
-        List<Event> events = eventRepository.findAll();
-        for (Event event : events) {
-            event.getOptions().size();
-        }
-        return events.stream()
-                .map(this::mapToListItem)
-                .collect(Collectors.toList());
-    }*/
     @Override
     @Cacheable(value = "events", key = "'all'")
     public List<ShowEventInfoDto> allEvents() {
@@ -112,22 +81,6 @@ public class EventServiceImpl implements EventService {
 
     }
 
-    /*@Transactional
-    public ShowDetailedEventInfoDto findEventById(Long id) {
-        Event event = eventRepository.findById(id)
-            .orElseThrow(() -> new EventNotFoundException("Событие с ID " + id + " не найдено"));
-        event.getOptions().size(); 
-        return new ShowDetailedEventInfoDto(
-                event.getId(),
-                event.getTitle(),
-                event.getDescription(),
-                event.getStatus().name(),
-                event.getClosesAt(),
-                event.getOptions().stream()
-                        .map(option -> new OptionDto(option.getId(), option.getText(), 0))
-                        .collect(Collectors.toList())
-        );
-    }*/
     @Override
     @Cacheable(value = "event", key = "#id", unless = "#result == null")
     public ShowDetailedEventInfoDto findEventById(Long id) {
@@ -144,25 +97,8 @@ public class EventServiceImpl implements EventService {
         } else {
             page = eventRepository.findAll(pageable);
         }
-        /*for (Event event : page.getContent()) {
-            event.getOptions().size();
-        }*/
         return page.map(this::mapToListItem);
     }
-
-    /*private ShowEventInfoDto mapToListItem(Event event) {
-        event.getOptions().size(); 
-        return new ShowEventInfoDto(
-                event.getId(),
-                event.getTitle(),
-                event.getStatus().name(),
-                event.getClosesAt(),
-                event.getOptions().stream()
-                        .limit(3)
-                        .map(option -> new OptionDto(option.getId(), option.getText(), 0))
-                        .collect(Collectors.toList())
-        );
-    }*/
 
     private org.example.prediction.dto.ShowEventInfoDto mapToListItem(Event event) {
         return mapper.map(event, org.example.prediction.dto.ShowEventInfoDto.class);
@@ -228,13 +164,17 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public boolean hasUserVoted(String username, Long eventId) {
+        return predictionRepository.existsByUserUsernameAndEventId(username, eventId);
+    }
+
+    @Override
     public User getCurrentUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден: " + username));
     }
 
-    //@Scheduled(fixedRate = 60000)
-        @CacheEvict(value = "events", allEntries = true)
+    @CacheEvict(value = "events", allEntries = true)
         @Transactional
         public void closeExpiredEvents() {
             log.debug("Запуск проверки истекших событий...");
@@ -249,5 +189,5 @@ public class EventServiceImpl implements EventService {
                 eventRepository.saveAll(expiredEvents);
             
             }
-        }
+    }
 }

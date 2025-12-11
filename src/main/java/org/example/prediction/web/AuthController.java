@@ -19,11 +19,18 @@ public class AuthController {
     private final AuthService authService;
 
     @GetMapping("/login")
-    public String loginPage(Model model) {
+    public String loginPage(Model model, jakarta.servlet.http.HttpServletRequest request) {
         log.debug("Отображение страницы входа");
         LoginDto loginDto = new LoginDto("", "");
 
         model.addAttribute("loginForm", loginDto);
+        
+        // Передаем сообщение об ошибке, если оно есть
+        String errorMessage = (String) request.getSession().getAttribute("error");
+        if (errorMessage != null) {
+            model.addAttribute("error", errorMessage);
+            request.getSession().removeAttribute("error"); // Удаляем атрибут, чтобы он не отображался снова
+        }
 
         return "auth/login";
     }
@@ -40,12 +47,6 @@ public class AuthController {
     public String registerUser(@Valid UserRegistrationDto userRegistrationDto, BindingResult bindingResult) {
         log.info("Попытка регистрации: {}", userRegistrationDto);
 
-        if (userRegistrationDto.getPassword() != null
-                && userRegistrationDto.getConfirmPassword() != null
-                && !userRegistrationDto.getPassword().equals(userRegistrationDto.getConfirmPassword())){
-            bindingResult.rejectValue("confirmPassword", "error.userRegistrationDto", "Пароли не совпадают");
-
-        }
         if (bindingResult.hasErrors()) {
             return "auth/register";
         }
