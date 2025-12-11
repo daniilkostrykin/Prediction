@@ -43,7 +43,7 @@
             </div>
             <div th:unless="${hasVoted or event.status == 'ACTIVE' and event.closesAt.isAfter(T(java.time.Instant).now())}"
                  style="padding: 20px; border-left: 5px solid #FFA500; border-radius: 8px; text-align: center;">
-                <h3>⚠️ Событие больше не принимает ставки</h3>
+                <h3>⚠️ Событие больше не принимает предсказания</h3>
                 <p th:if="${event.status != 'ACTIVE'}" th:text="'Статус события: ' + ${event.status}">Статус события</p>
                 <p th:if="${event.status == 'ACTIVE' and !event.closesAt.isAfter(T(java.time.Instant).now())}">Время для предсказаний истекло</p>
             </div>
