@@ -17,8 +17,8 @@
         <article th:if="${errorMessage}" class="secondary" style="margin-bottom: 1rem; border-left: 5px solid red;">
             <span th:text="${errorMessage}"></span>
         </article>
-
-        <div th:if="${!hasVoted and currentUser != null and currentUser.role.name() != 'ADMIN'}"
+        
+        <div th:if="${!hasVoted and currentUser != null and currentUser.role.name() != 'ADMIN' and event.status == 'ACTIVE' and event.closesAt.isAfter(T(java.time.Instant).now())}"
         style="display: flex; justify-content: center;">
         <form method="post" th:action="@{/predictions/make}">
             
@@ -35,11 +35,21 @@
             <button type="submit" style="margin-top: 40px; width: auto; padding: 15px 39px; font-size: 1rem;">Подтвердить выбор</button>
         </form>
         </div>
-        <hr>
-        <div th:if="${hasVoted}" style="padding: 20px; border-left: 5px solid #4caf50; border-radius: 8px; text-align: center;">
-            <h3>✅ Вы сделали предсказание в этом событии</h3>
-            <p>Дождитесь окончания события, чтобы узнать результат.</p>
+        
+        <div th:unless="${!hasVoted and currentUser != null and currentUser.role.name() != 'ADMIN' and event.status == 'ACTIVE' and event.closesAt.isAfter(T(java.time.Instant).now())}">
+            <div th:if="${hasVoted}" style="padding: 20px; border-left: 5px solid #4caf50; border-radius: 8px; text-align: center;">
+                <h3>✅ Вы сделали предсказание в этом событии</h3>
+                <p>Дождитесь окончания события, чтобы узнать результат.</p>
+            </div>
+            <div th:unless="${hasVoted or event.status == 'ACTIVE' and event.closesAt.isAfter(T(java.time.Instant).now())}"
+                 style="padding: 20px; border-left: 5px solid #FFA500; border-radius: 8px; text-align: center;">
+                <h3>⚠️ Событие больше не принимает ставки</h3>
+                <p th:if="${event.status != 'ACTIVE'}" th:text="'Статус события: ' + ${event.status}">Статус события</p>
+                <p th:if="${event.status == 'ACTIVE' and !event.closesAt.isAfter(T(java.time.Instant).now())}">Время для предсказаний истекло</p>
+            </div>
         </div>
+        
+        <hr>
         <!-- Блок для администратора: кнопки управления событием -->
         <div th:if="${currentUser != null and currentUser.role.name() == 'ADMIN'}">
             

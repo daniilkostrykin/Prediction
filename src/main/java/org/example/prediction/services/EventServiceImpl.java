@@ -137,6 +137,9 @@ public class EventServiceImpl implements EventService {
         EventOption winningOption = eventOptionRepository.findById(winningOptionId)
                 .orElseThrow(() -> new IllegalArgumentException("Опция не найдена"));
 
+        if (event.getStatus() == EventStatus.FINISHED) {
+            throw new IllegalStateException("Событие уже завершено!");
+        }
         if (winningOption.getEvent() == null || !winningOption.getEvent().getId().equals(event.getId())) {
             throw new IllegalArgumentException("Опция не принадлежит этому событию");
         }
@@ -175,19 +178,20 @@ public class EventServiceImpl implements EventService {
     }
 
     @CacheEvict(value = "events", allEntries = true)
-        @Transactional
-        public void closeExpiredEvents() {
-            log.debug("Запуск проверки истекших событий...");
-            
-            List<Event> expiredEvents = eventRepository.findAllByStatusAndClosesAtBefore(EventStatus.ACTIVE, Instant.now());
-            
-            if (!expiredEvents.isEmpty()) {
-                for (Event event : expiredEvents) {
-                    log.info("Событие id={} истекло. Закрываем прием ставок.", event.getId());
-                    event.setStatus(EventStatus.CLOSED); 
-                }
-                eventRepository.saveAll(expiredEvents);
-            
+    @Transactional
+    @org.springframework.scheduling.annotation.Scheduled(fixedRate = 60000) // Выполнять каждую минуту
+    public void closeExpiredEvents() {
+        log.debug("Запуск проверки истекших событий...");
+        
+        List<Event> expiredEvents = eventRepository.findAllByStatusAndClosesAtBefore(EventStatus.ACTIVE, Instant.now());
+        
+        if (!expiredEvents.isEmpty()) {
+            for (Event event : expiredEvents) {
+                log.info("Событие id={} истекло. Закрываем прием ставок.", event.getId());
+                event.setStatus(EventStatus.CLOSED);
             }
+            eventRepository.saveAll(expiredEvents);
+        
+        }
     }
 }
