@@ -45,8 +45,11 @@ public class ConcurrencyTest {
         prizeDto.setDrawDate(LocalDateTime.now().plusDays(1));
         prizeService.createPrize(prizeDto);
 
-        Long prizeId = prizeRepository.findAll().get(0).getId();
-
+        Long prizeId = prizeRepository.findAll().stream()
+                .filter(p -> p.getTitle().equals("Race Prize"))
+                .findFirst()
+                .orElseThrow()
+                .getId();
         // 3. Запускаем 2 потока одновременно
         int numberOfThreads = 2;
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
