@@ -12,7 +12,8 @@ import org.example.prediction.models.enums.UserRole;
 @Setter
 @NoArgsConstructor
 public class User extends BaseEntity{
-    
+    @Version
+    private Long version;
 
     @Column(nullable = false, unique = true)
     private String username;
