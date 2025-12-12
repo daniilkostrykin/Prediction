@@ -14,5 +14,5 @@ footer {
 .centered-table th,
 .centered-table td {
     text-align: center;
-    vertical-align: middle; /* если хочешь выравнивание по вертикали */
+    vertical-align: middle;
 }

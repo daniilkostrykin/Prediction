@@ -25,11 +25,10 @@ public class AuthController {
 
         model.addAttribute("loginForm", loginDto);
         
-        // Передаем сообщение об ошибке, если оно есть
         String errorMessage = (String) request.getSession().getAttribute("error");
         if (errorMessage != null) {
             model.addAttribute("error", errorMessage);
-            request.getSession().removeAttribute("error"); // Удаляем атрибут, чтобы он не отображался снова
+            request.getSession().removeAttribute("error");
         }
 
         return "auth/login";

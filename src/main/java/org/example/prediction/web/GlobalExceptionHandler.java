@@ -47,7 +47,11 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(NoResourceFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void handleResourceNotFound(NoResourceFoundException ex) {
+    public String handleNoResourceFound(NoResourceFoundException ex, Model model) {
+        model.addAttribute("errorCode", 404);
+        model.addAttribute("errorTitle", "Файл не найден");
+        model.addAttribute("errorMessage", "Запрошенный ресурс отсутствует.");
+        return "error/custom-error";
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

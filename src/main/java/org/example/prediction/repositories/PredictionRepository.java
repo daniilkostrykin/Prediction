@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PredictionRepository extends JpaRepository<Prediction, Long> {
     boolean existsByUserAndEvent(User user, Event event);
-    boolean existsByUserUsernameAndEvent(String username, Event event);
     List<Prediction> findByUserOrderByCreatedAtDesc(User user);
     List<Prediction> findAllByEvent(Event event);
     void deleteAllByEventId(Long eventId);

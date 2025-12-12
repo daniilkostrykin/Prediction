@@ -1,5 +1,6 @@
 package org.example.prediction.services;
 
+import lombok.RequiredArgsConstructor;
 import org.example.prediction.dto.admin.AdminDashboardViewModel;
 import org.example.prediction.models.entities.Event;
 import org.example.prediction.models.entities.User;
@@ -15,18 +16,12 @@ import java.time.ZoneId;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AdminService {
 
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
     private final PredictionRepository predictionRepository;
-
-    public AdminService(UserRepository userRepository, EventRepository eventRepository, 
-                       PredictionRepository predictionRepository) {
-        this.userRepository = userRepository;
-        this.eventRepository = eventRepository;
-        this.predictionRepository = predictionRepository;
-    }
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
