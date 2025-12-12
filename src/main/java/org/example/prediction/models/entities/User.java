@@ -31,4 +31,7 @@ public class User extends BaseEntity{
     @Column(nullable = false)
     private UserRole role;
 
+    @Column(nullable = false)
+    private int balance = 0;
+
 }

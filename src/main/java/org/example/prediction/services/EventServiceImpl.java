@@ -157,6 +157,7 @@ public class EventServiceImpl implements EventService {
 
                 User winner = prediction.getUser();
                 winner.setSuccessfulPredictions(winner.getSuccessfulPredictions() + 1);
+                winner.setBalance(winner.getBalance() + 1);
                 userRepository.save(winner);
 
             } else {
