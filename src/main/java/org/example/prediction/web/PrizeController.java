@@ -50,7 +50,6 @@ public class PrizeController {
         if (result.hasErrors()) {
             attr.addFlashAttribute("org.springframework.validation.BindingResult.addPrizeForm", result);
             attr.addFlashAttribute("addPrizeForm", form);
-            attr.addFlashAttribute("errorMessage", "Ошибка валидации формы");
             return "redirect:/prizes";
         }
         prizeService.createPrize(form);
