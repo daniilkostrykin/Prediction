@@ -52,7 +52,7 @@ class PrizeServiceTest {
         user = new User();
         user.setId(1L);
         user.setUsername("testUser");
-        user.setSuccessfulPredictions(10);
+        user.setBalance(10);
 
         prize = new Prize();
         prize.setId(1L);
@@ -108,7 +108,7 @@ class PrizeServiceTest {
         prizeService.buyTicket(1L, "testUser");
 
         // Assert
-        assertEquals(5, user.getSuccessfulPredictions()); // 10 - 5 = 5
+        assertEquals(5, user.getBalance()); // 10 - 5 = 5
         verify(userRepository, times(1)).save(user);
         verify(ticketRepository, times(1)).save(any(Ticket.class));
     }
@@ -157,7 +157,7 @@ class PrizeServiceTest {
     @Test
     void testBuyTicket_ThrowsException_WhenInsufficientBalance() {
         // Arrange
-        user.setSuccessfulPredictions(2); // Less than ticket price (5)
+        user.setBalance(2); // Less than ticket price (5)
         when(prizeRepository.findById(1L)).thenReturn(Optional.of(prize));
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
 

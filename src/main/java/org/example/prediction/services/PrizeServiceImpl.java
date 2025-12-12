@@ -58,7 +58,7 @@ public class PrizeServiceImpl implements PrizeService {
             throw new IllegalStateException("Недостаточно побед для покупки");
         }
 
-        user.setSuccessfulPredictions(user.getBalance() - prize.getTicketPrice());
+        user.setBalance(user.getBalance() - prize.getTicketPrice());
         userRepository.save(user);
 
         Ticket ticket = new Ticket();
