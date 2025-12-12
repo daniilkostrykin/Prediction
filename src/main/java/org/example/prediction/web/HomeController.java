@@ -12,4 +12,9 @@ public class HomeController {
         log.debug("Отображение главной страницы");
         return "index";
     }
+    @GetMapping("/boom")
+    public String simulateError() {
+        // Деление на ноль или явный выброс исключения
+        throw new RuntimeException("Это тестовая авария! Проверка Error Page.");
+    }
 }

@@ -30,7 +30,7 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
             errorMessage = "Неправильный логин или пароль";
         } else if (exception instanceof DisabledException) {
             log.warn("Аккаунт отключен");
-            errorMessage = "Акаунт отключен";
+            errorMessage = "Аккаунт отключен";
         } else if (exception instanceof LockedException) {
             log.warn("Аккаунт заблокирован");
             errorMessage = "Аккаунт заблокирован";
