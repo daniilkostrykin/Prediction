@@ -21,10 +21,10 @@
     </hgroup>
 
     <form action="/prizes" method="get" role="search">
-        <fieldset role="group">
-            <input type="search" name="search" th:value="${searchQuery}" placeholder="Найти приз...">
-            <button type="submit">Искать</button>
-        </fieldset>
+        <div role="group" style="display: flex; gap: 10px;">
+
+        <input type="search" name="search" th:value="${searchQuery}" placeholder="Найти приз...">
+            <button type="submit" style="width: auto; padding: 5px 15px; font-size: 0.8rem;">Искать</button></div>
     </form>
 
     <article sec:authorize="hasRole('ADMIN')">
@@ -32,16 +32,24 @@
         <form method="post" th:action="@{/prizes/add}" th:object="${addPrizeForm}">
             <div class="grid">
                 <label>Название
-                    <input type="text" th:field="*{title}" placeholder="Например: iPhone 16" required>
+                    <input type="text" th:field="*{title}" placeholder="Например: iPhone 16"
+                           th:aria-invalid="${#fields.hasErrors('title') ? 'true' : ''}" required>
+                    <small th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color: red;"></small>
                 </label>
                 <label>Цена (побед)
-                    <input type="number" th:field="*{ticketPrice}" min="1" required>
+                    <input type="number" th:field="*{ticketPrice}" min="1"
+                           th:aria-invalid="${#fields.hasErrors('ticketPrice') ? 'true' : ''}" required>
+                    <small th:if="${#fields.hasErrors('ticketPrice')}" th:errors="*{ticketPrice}"
+                           style="color: red;"></small>
                 </label>
                 <label>Дата итога
-                    <input type="datetime-local" th:field="*{drawDate}" required>
+                    <input type="datetime-local" th:field="*{drawDate}"
+                           th:aria-invalid="${#fields.hasErrors('drawDate') ? 'true' : ''}" required>
+                    <small th:if="${#fields.hasErrors('drawDate')}" th:errors="*{drawDate}"
+                           style="color: red;"></small>
                 </label>
             </div>
-            <button type="submit">Запустить</button>
+            <button type="submit" style="width: 50%; display: block; margin: 0 auto; padding: 5px 15px;">Запустить</button>
         </form>
     </article>
 

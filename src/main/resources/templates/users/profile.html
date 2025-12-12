@@ -9,7 +9,7 @@
         <h1>Личный кабинет</h1>
     </hgroup>
 
-    <div class="grid">
+    <div class="grid" style="text-align: center;">
         <article>
             <header>Всего предсказываний</header>
             <h2 th:text="${totalPredictions}">0</h2>
@@ -32,7 +32,7 @@
         <p>Вы еще не сделали ни одного предсказывания. <a href="/events/all">Перейти к событиям?</a></p>
     </div>
 
-    <table role="grid" th:if="${!history.empty}">
+    <table role="grid" th:if="${!history.empty}" class="centered-table">
         <thead>
         <tr>
             <th>Дата</th>
