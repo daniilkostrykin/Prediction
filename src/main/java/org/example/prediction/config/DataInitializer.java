@@ -58,7 +58,33 @@ public class DataInitializer {
             } else {
                 System.out.println("Пользователь user1 уже существует");
             }
+/*
+            // Создание дополнительных пользователей с обычными именами user2, user3 и т.д.
+            for (int i = 2; i <= 10; i++) {
+                String username = "user" + i;
+                if (userRepository.findByUsername(username).isEmpty()) {
+                    System.out.println("Создание пользователя " + username + "...");
+                    User user = new User();
+                    user.setUsername(username);
+                    user.setPassword(passwordEncoder.encode("12345"));
+                    user.setEmail(username + "@example.com");
+                    user.setRole(UserRole.USER);
+                    
+                    // Установка случайного баланса от 10 до 1000
+                    double balance = 10 + Math.random() * 990;
+                    user.setBalance((int) balance);
+                    
+                    // Установка случайного количества успешных предсказаний от 0 до 20
+                    int successfulPredictions = (int) (Math.random() * 21);
+                    user.setSuccessfulPredictions(successfulPredictions);
 
+                    userRepository.save(user);
+                    System.out.println("Пользователь создан: " + username + " / 12345, баланс: " + (int) balance + ", успешных предсказаний: " + successfulPredictions);
+                } else {
+                    System.out.println("Пользователь " + username + " уже существует");
+                }
+            }
+*/
             // Создание событий и опций
             if (eventRepository.count() == 0) {
                 System.out.println("Создание событий и опций...");

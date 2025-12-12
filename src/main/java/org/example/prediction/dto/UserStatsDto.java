@@ -12,4 +12,5 @@ public class UserStatsDto implements java.io.Serializable {
     private int successfulPredictions;
     private long totalPredictionsCount;
     private double successRate;
+    private int balance;
 }

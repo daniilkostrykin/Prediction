@@ -54,11 +54,11 @@ public class PrizeServiceImpl implements PrizeService {
         if (prize.getDrawDate().isBefore(java.time.Instant.now())) {
             throw new IllegalStateException("Время участия истекло! Ждите результатов.");
         }
-        if (user.getSuccessfulPredictions() < prize.getTicketPrice()) {
+        if (user.getBalance() < prize.getTicketPrice()) {
             throw new IllegalStateException("Недостаточно побед для покупки");
         }
 
-        user.setSuccessfulPredictions(user.getSuccessfulPredictions() - prize.getTicketPrice());
+        user.setSuccessfulPredictions(user.getBalance() - prize.getTicketPrice());
         userRepository.save(user);
 
         Ticket ticket = new Ticket();

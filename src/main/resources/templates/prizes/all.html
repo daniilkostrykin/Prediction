@@ -16,7 +16,7 @@
     <hgroup>
         <h1>Розыгрыши призов</h1>
         <p th:if="${currentUser != null}">
-            Ваш баланс: <strong th:text="${currentUser.successfulPredictions}">0</strong> побед
+            Ваш баланс: <strong th:text="${currentUser.balance}" style="color:gold">0</strong> побед
         </p>
     </hgroup>
 
@@ -79,12 +79,12 @@
 
                 <form method="post" th:action="@{/prizes/buy/{id}(id=${prize.id})}" th:if="${currentUser != null}">
                     <button type="submit"
-                            th:if="${currentUser.successfulPredictions >= prize.ticketPrice}">
+                            th:if="${currentUser.balance >= prize.ticketPrice}">
                         Купить билет
                     </button>
 
                     <button disabled
-                            th:if="${currentUser.successfulPredictions < prize.ticketPrice}"
+                            th:if="${currentUser.balance < prize.ticketPrice}"
                             class="secondary">
                         Не хватает побед
                     </button>
