@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.orm.ObjectOptimisticLockingFailureException; // Ошибка версии
 
 import java.time.LocalDateTime;
 import java.util.concurrent.CountDownLatch;
@@ -35,7 +34,7 @@ public class ConcurrencyTest {
         user.setEmail("racer@test.com");
         user.setPassword("pass");
         user.setRole(UserRole.USER);
-        user.setSuccessfulPredictions(10); // Баланс 10
+        user.setBalance(10); // Баланс 10
         userRepository.save(user);
 
         // 2. Создаем приз ценой 10 (хватает ровно на 1 билет)
@@ -84,7 +83,7 @@ public class ConcurrencyTest {
 
         // Баланс должен быть 0, а не -10
         User updatedUser = userRepository.findById(user.getId()).orElseThrow();
-        Assertions.assertEquals(0, updatedUser.getSuccessfulPredictions());
+        Assertions.assertEquals(0, updatedUser.getBalance());
 
         // Билет должен быть 1
         Assertions.assertEquals(1, ticketRepository.count());

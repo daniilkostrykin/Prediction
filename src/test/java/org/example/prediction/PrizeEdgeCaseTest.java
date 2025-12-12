@@ -47,7 +47,7 @@ class PrizeEdgeCaseTest {
         user = new User();
         user.setId(1L);
         user.setUsername("testUser");
-        user.setSuccessfulPredictions(10);
+        user.setBalance(10);
 
         prize = new Prize();
         prize.setId(1L);
@@ -82,12 +82,12 @@ class PrizeEdgeCaseTest {
     @Test
     void testBuyTicket_WithExactBalance() {
         // User has exactly the required amount
-        user.setSuccessfulPredictions(5); // Same as ticket price
+        user.setBalance(5); // Same as ticket price
         when(prizeRepository.findById(1L)).thenReturn(Optional.of(prize));
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
 
         assertDoesNotThrow(() -> prizeService.buyTicket(1L, "testUser"));
-        assertEquals(0, user.getSuccessfulPredictions()); // Should be 0 after purchase
+        assertEquals(0, user.getBalance()); // Should be 0 after purchase
         verify(userRepository, times(1)).save(user);
         verify(ticketRepository, times(1)).save(any(Ticket.class));
     }
@@ -95,7 +95,7 @@ class PrizeEdgeCaseTest {
     @Test
     void testBuyTicket_WithInsufficientBalanceByOne() {
         // User has 1 less than required
-        user.setSuccessfulPredictions(4); // 1 less than ticket price (5)
+        user.setBalance(4); // 1 less than ticket price (5)
         when(prizeRepository.findById(1L)).thenReturn(Optional.of(prize));
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
 
@@ -106,7 +106,7 @@ class PrizeEdgeCaseTest {
 
     @Test
     void testBuyTicket_WithZeroBalance() {
-        user.setSuccessfulPredictions(0);
+        user.setBalance(0);
         when(prizeRepository.findById(1L)).thenReturn(Optional.of(prize));
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
 
