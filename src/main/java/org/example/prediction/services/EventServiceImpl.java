@@ -97,11 +97,7 @@ public class EventServiceImpl implements EventService {
         } else {
             page = eventRepository.findAll(pageable);
         }
-        return page.map(this::mapToListItem);
-    }
-
-    private org.example.prediction.dto.ShowEventInfoDto mapToListItem(Event event) {
-        return mapper.map(event, org.example.prediction.dto.ShowEventInfoDto.class);
+        return page.map(event -> mapper.map(event, ShowEventInfoDto.class));
     }
 
     public Event findEventWithStats(Long id) {
@@ -124,6 +120,7 @@ public class EventServiceImpl implements EventService {
         
         eventRepository.deleteById(id);
     }
+    
     @Override
     @Transactional
     @Caching(evict = {
